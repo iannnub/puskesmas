@@ -1,0 +1,40 @@
+tanggal masuk
+keluar
+gudan-apotik-poned-ugd
+
+tambahan : semua unit, semua obat, dan pilihan, dashboard (ugd, poned)
+
+request<
+
+entry-sisa
+
+----------------------------------------------------------- + ----------------------------------
+rawat inap(ugd) ---->
+tanggal keluar masuknya obat
+(user Poli) ---> request obat tinggal nambah untuk sisa obat yang ada diapotek dan obat masuknya
+
+(admin) -----> entry obat dari req jika stock yang dikirimkan tidak full(sesuai yg diminta) (aksi khusus)
+
+(admin) -----> inputan obat yang dikirim dari yang direq (jumlah obat yang dikirim dan yang belum)
+(ugd) -----> tambah history inputan
+
+
+stock Gudang
+
+(inputan resep UGD) ----> tanggal resep null realtime
+(inputan resep UGD) ----> form tidak kereset untuk nama pasien dan juga jenis pelayanan dan penampilan nama obat Ketika berhasil dan gagal
+(inputan resep UGD) ------> alert tetap sweet2
+(inputan resep UGD) ------> nambah nama dokter inputan resep, nama dokter by inputtan db
+print sisa stock yang dibutuhkan untuk di cek sama stock fisik
+
+tambahan crud untuk resep obat Ketika sudah dientry agar bisa mengganti jika obat yang dientry kurang/lebih
+
+
+req - kurang hasil motong stocknya (apotik dan gudang)
+resep - semuanya masuk ke apotik
+input obat- waktunya real time 
+resep- nama dan jenis pelayanan tetap jika kerefresh... lalu data obat jangan id tapi nama jika ada notif
+ugd resep(export) - masih blm jelas hasil outputnya kek mana, nama pasien nda ada (buat dua versi satu khusus dgn nama pasien satu full versinya(stok gudang, cm ini yg diperlukan exportnya))
+laporan stok diperlukan untuk cek barang fisik apakah sesuaiapa tidak	
+
+resep - tambahkna fitur edit, digunakan jika ada kesalahan saat menginput data
