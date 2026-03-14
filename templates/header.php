@@ -1,6 +1,5 @@
 <?php
-// File ini dipanggil SETELAH config.php,
-// jadi sudah punya akses ke BASE_URL dan $_SESSION
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -86,5 +85,3 @@
 
                 </nav>
                 <div class="container-fluid">
-
-                    ```

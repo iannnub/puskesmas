@@ -1,8 +1,4 @@
 <?php
-// File ini dipanggil setelah 'config.php'
-// dan sudah punya akses ke BASE_URL & $_SESSION
-
-// Logika untuk menentukan halaman aktif (untuk highlight menu)
 $current_page = $_SERVER['REQUEST_URI'];
 ?>
 

@@ -1,5 +1,5 @@
 <?php
-// File ini dipanggil setelah 'config.php'
+
 ?>
 
                 </div>
