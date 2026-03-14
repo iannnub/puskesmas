@@ -1,24 +1,17 @@
 <?php
-// 1. Panggil "jantung" config.php
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
-// Hanya SUPER ADMIN (Role ID 1) dan ADMIN (Role ID 2) yang boleh
 if ($_SESSION['role_id'] != 1 && $_SESSION['role_id'] != 2) {
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin atau Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
 $page_title = "Kelola Data Obat";
 
-// 5. [LOGIKA BACKEND UTAMA]
-// --- TIDAK ADA YANG DIUBAH DARI SINI ---
 try {
-    // [A] Ambil data Kategori (untuk dropdown Form Tambah & Form Filter)
+
     $sql_kategori = "SELECT 
                         k.id_kategori_obat, 
                         j.nama_jenis_obat, 
@@ -32,17 +25,14 @@ try {
     $stmt_kategori = $pdo->query($sql_kategori);
     $kategoris = $stmt_kategori->fetchAll();
 
-    // [B] Siapkan Variabel Filter & Search
     $filter_kategori = $_GET['kategori'] ?? '';
     $search_nama = $_GET['search'] ?? '';
 
-    // [C] Siapkan Variabel Pagination
-    $data_per_halaman = 20; // Sesuai permintaan Anda
+    $data_per_halaman = 20; 
     $halaman_saat_ini = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
     if ($halaman_saat_ini < 1) $halaman_saat_ini = 1;
     $offset = ($halaman_saat_ini - 1) * $data_per_halaman;
 
-    // [D] Bangun Query Dinamis (Base Query)
     $sql_base = "FROM 
                     tbl_obat o
                 LEFT JOIN 
@@ -50,35 +40,32 @@ try {
                 LEFT JOIN
                     tbl_jenis_obat j ON k.id_jenis_obat = j.id_jenis_obat";
     
-    $where_conditions = []; // Array untuk menampung kondisi WHERE
-    $params = []; // Array untuk menampung parameter PDO
+    $where_conditions = []; 
+    $params = []; 
 
-    // Tambahkan kondisi filter KATEGORI
+
     if (!empty($filter_kategori)) {
         $where_conditions[] = "o.id_kategori_obat = ?";
         $params[] = $filter_kategori;
     }
 
-    // Tambahkan kondisi filter SEARCH NAMA
+
     if (!empty($search_nama)) {
         $where_conditions[] = "o.nama_obat LIKE ?";
         $params[] = "%" . $search_nama . "%";
     }
 
-    // Gabungkan kondisi WHERE jika ada
     $sql_where = "";
     if (!empty($where_conditions)) {
         $sql_where = " WHERE " . implode(" AND ", $where_conditions);
     }
 
-    // [E] Query untuk COUNT (Menghitung Total Data untuk Pagination)
     $sql_count = "SELECT COUNT(o.id_obat) " . $sql_base . $sql_where;
     $stmt_count = $pdo->prepare($sql_count);
     $stmt_count->execute($params);
     $total_data = $stmt_count->fetchColumn();
     $total_halaman = ceil($total_data / $data_per_halaman);
 
-    // [F] Query untuk SELECT DATA (Ambil data obat sesuai halaman)
     $sql_obat = "SELECT 
                     o.id_obat, o.kode_obat, o.nama_obat, o.satuan, o.id_kategori_obat,
                     k.nama_kategori, j.nama_jenis_obat
@@ -93,18 +80,15 @@ try {
     $params_data[] = $offset;
 
     $stmt_obat_list = $pdo->prepare($sql_obat);
-    $stmt_obat_list->execute($params_data); // Pakai $params_data
+    $stmt_obat_list->execute($params_data); 
     $obats = $stmt_obat_list->fetchAll();
 
 } catch (PDOException $e) {
     die("Error mengambil data: " . $e->getMessage());
 }
-// --- SAMPAI SINI LOGIC BACKEND AMAN ---
 
-// 6. Panggil "Kepala" (Template Header)
 include '../templates/header.php';
-// Panggil Sidebar (jika terpisah)
-// include '../templates/sidebar.php';
+
 ?>
 
 <div class="container-fluid">
@@ -262,12 +246,12 @@ include '../templates/header.php';
                     <nav aria-label="Navigasi Halaman" class="mt-3">
                         <ul class="pagination justify-content-center">
                             <?php
-                            // Siapkan parameter URL agar filter tetap menempel
+                            
                             $query_params = [];
                             if (!empty($search_nama)) $query_params['search'] = $search_nama;
                             if (!empty($filter_kategori)) $query_params['kategori'] = $filter_kategori;
                             
-                            // Tombol "Sebelumnya"
+                           
                             if ($halaman_saat_ini > 1) {
                                 $query_params['halaman'] = $halaman_saat_ini - 1;
                                 echo '<li class="page-item"><a class="page-link" href="?' . http_build_query($query_params) . '">&laquo; Sebelumnya</a></li>';
@@ -275,10 +259,10 @@ include '../templates/header.php';
                                 echo '<li class="page-item disabled"><span class="page-link">&laquo; Sebelumnya</span></li>';
                             }
 
-                            // Tampilkan Info Halaman (Versi simple)
+                           
                             echo '<li class="page-item active" aria-current="page"><span class="page-link">Halaman ' . $halaman_saat_ini . ' dari ' . $total_halaman . '</span></li>';
 
-                            // Tombol "Berikutnya"
+                            
                             if ($halaman_saat_ini < $total_halaman) {
                                 $query_params['halaman'] = $halaman_saat_ini + 1;
                                 echo '<li class="page-item"><a class="page-link" href="?' . http_build_query($query_params) . '">Berikutnya &raquo;</a></li>';
@@ -346,30 +330,30 @@ include '../templates/header.php';
 
 
 <?php 
-// 8. Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php';
 ?>
 
 <script>
-// Script ini akan berjalan SETELAH halaman dan library jQuery di footer.php di-load
+
 $(document).ready(function() {
     
-    // Yey, jQuery ada. Mari kita buat modal 'Ubah' jadi canggih
+    
     $('#editModal').on('show.bs.modal', function (event) {
-        // Tombol yang memicu modal
+        
         var button = $(event.relatedTarget); 
         
-        // Ambil data dari atribut 'data-*' tombol
+       
         var id = button.data('id');
         var kode = button.data('kode');
         var nama = button.data('nama');
         var satuan = button.data('satuan');
         var id_kategori = button.data('id_kategori');
         
-        // Dapatkan objek modal
+       
         var modal = $(this);
         
-        // "Suntikkan" data ke dalam form di modal
+       
         modal.find('.modal-title').text('Ubah Data Obat #' + id);
         modal.find('#edit_id_obat').val(id);
         modal.find('#edit_kode_obat').val(kode);

@@ -1,29 +1,23 @@
 <?php
-// master/data_poli.php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
 require_once '../templates/auth_check.php';
 
-// 3. (SATPA M2: ROLE CHECK)
 if ($_SESSION['role_id'] != 1) {
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
 $page_title = "Kelola Data Poli";
 
 try {
-    // Ambil data Unit (Lokasi Stok) untuk mengisi <select> dropdown
+
     $stmt_unit = $pdo->query("SELECT id_unit, nama_unit FROM tbl_unit ORDER BY nama_unit ASC");
-    $units = $stmt_unit->fetchAll(); // Untuk form Tambah dan form Filter
+    $units = $stmt_unit->fetchAll(); 
 
-    // --- LOGIKA FILTER ---
-    $filter_unit_id = isset($_GET['filter_unit']) ? $_GET['filter_unit'] : ''; // Ambil ID unit dari URL
+    $filter_unit_id = isset($_GET['filter_unit']) ? $_GET['filter_unit'] : ''; 
 
-    // Siapkan query dasar
     $sql_poli = "SELECT 
                    p.id_poli, 
                    p.nama_poli,
@@ -33,35 +27,30 @@ try {
                  JOIN 
                    tbl_unit u ON p.id_unit_stok_default = u.id_unit";
 
-    $params = []; // Siapkan array parameter untuk PDO
+    $params = []; 
 
-    // Jika user MEMILIH filter unit
     if (!empty($filter_unit_id)) {
-        // Tambahkan kondisi WHERE ke query
         $sql_poli .= " WHERE p.id_unit_stok_default = ?";
-        $params[] = $filter_unit_id; // Tambahkan ID unit ke parameter
+        $params[] = $filter_unit_id; 
     }
 
     $sql_poli .= " ORDER BY p.id_poli ASC";
 
-    // Eksekusi query
     $stmt_poli_list = $pdo->prepare($sql_poli);
     $stmt_poli_list->execute($params);
     $polis = $stmt_poli_list->fetchAll();
 
 } catch (PDOException $e) {
-    // Tangani error jika query gagal
+
     die("Error mengambil data: " . $e->getMessage());
 }
 
-// 6. Panggil "Kepala" (Template Header)
-// (header.php OTOMATIS memanggil sidebar.php)
 include '../templates/header.php';
 ?>
 
-<!-- CSS Fix Select2 agar tampil seperti form-control (SB Admin compatible) -->
+
 <style>
-/* Make select2 look like bootstrap .form-control */
+
 .select2-container--bootstrap4 .select2-selection--single,
 .select2-container .select2-selection--single {
     height: calc(2.25rem + 2px) !important;
@@ -85,13 +74,13 @@ include '../templates/header.php';
     top: 8px !important;
 }
 
-/* Hide clear 'x' if present */
+
 .select2-container--bootstrap4 .select2-selection__clear,
 .select2-container .select2-selection__clear {
     display: none !important;
 }
 
-/* Ensure select2 container fills width */
+
 .select2-container { width: 100% !important; }
 </style>
 
@@ -134,7 +123,7 @@ include '../templates/header.php';
                     <div class="col-md-6">
                          <div class="form-group">
                             <label for="id_unit_stok_default">Ambil Stok Default Dari</label>
-                            <!-- tambahkan class select2bs4 supaya nanti JS dapat target -->
+
                             <select id="id_unit_stok_default" name="id_unit_stok_default" class="form-control select2bs4" required>
                                 <option value="">-- Pilih Unit Stok --</option>
                                 <?php foreach ($units as $unit): ?>
@@ -226,15 +215,15 @@ include '../templates/header.php';
 </main>
 
 <?php
-// 8. Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php';
 ?>
 
-<!-- Inisialisasi Select2 (cek dulu apakah Select2 tersedia) -->
+
 <script>
 $(document).ready(function() {
     if (typeof $.fn.select2 === 'function') {
-        // Terapkan Select2 dengan theme bootstrap4 ke semua elemen yang pake class select2bs4
+
         $('.select2bs4').select2({
             theme: 'bootstrap4',
             width: '100%',

@@ -1,20 +1,16 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
+
 require_once '../templates/auth_check.php';
 
-// (SATPAM 2: ROLE CHECK - TIDAK PERLU)
-// Semua role (1, 2, 3, 4) boleh melihat halaman ini.
 
-// 4. Set Judul Halaman
 $page_title = "Lihat Sisa Stok Obat";
 
-// 5. [LOGIKA BACKEND UTAMA]
-// --- TIDAK ADA YANG DIUBAH DARI SINI ---
+
 try {
-    // [A] Ambil data Kategori (untuk dropdown Form Filter)
+   
     $sql_kategori = "SELECT 
                         k.id_kategori_obat, 
                         j.nama_jenis_obat, 
@@ -28,24 +24,24 @@ try {
     $stmt_kategori = $pdo->query($sql_kategori);
     $kategoris = $stmt_kategori->fetchAll();
     
-    // [B] Ambil data Unit (HANYA untuk filter Admin/Super Admin)
+    
     $units = [];
     if ($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2) {
         $stmt_unit = $pdo->query("SELECT id_unit, nama_unit FROM tbl_unit ORDER BY nama_unit ASC");
         $units = $stmt_unit->fetchAll();
     }
 
-    // [C] Siapkan Variabel Filter & Search
+   
     $filter_kategori = $_GET['kategori'] ?? '';
     $search_nama = $_GET['search'] ?? '';
 
-    // [D] Siapkan Variabel Pagination
+
     $data_per_halaman = 20;
     $halaman_saat_ini = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
     if ($halaman_saat_ini < 1) $halaman_saat_ini = 1;
     $offset = ($halaman_saat_ini - 1) * $data_per_halaman;
 
-    // [E] Bangun Query Dinamis (Base Query)
+    
     $sql_base = "FROM 
                     tbl_stok_inventori s
                 JOIN 
@@ -55,17 +51,16 @@ try {
                 LEFT JOIN
                     tbl_jenis_obat j ON k.id_jenis_obat = j.id_jenis_obat";
     
-    $where_conditions = []; // Array untuk menampung kondisi WHERE
-    $params = []; // Array untuk menampung parameter PDO
+    $where_conditions = []; 
 
-    // [F] (KUNCI LOGIKA RBAC) Tentukan Filter Unit berdasarkan Role
+
     $filter_unit_id = '';
     
     if ($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2) {
-        // --- ADMIN / SUPER ADMIN ---
+  
         $filter_unit_id = $_GET['unit'] ?? ''; 
     } else {
-        // --- POLI DEPAN (3) / POLI BELAKANG (4) ---
+       
         $filter_unit_id = $_SESSION['unit_stok_id'];
     }
     
@@ -90,14 +85,14 @@ try {
         $sql_where = " WHERE " . implode(" AND ", $where_conditions);
     }
 
-    // [G] Query untuk COUNT (Menghitung Total Data untuk Pagination)
+    
     $sql_count = "SELECT COUNT(s.id_stok) " . $sql_base . $sql_where;
     $stmt_count = $pdo->prepare($sql_count);
     $stmt_count->execute($params);
     $total_data = $stmt_count->fetchColumn();
     $total_halaman = ceil($total_data / $data_per_halaman);
 
-    // [H] Query untuk SELECT DATA (Ambil data stok sesuai halaman)
+    
     $sql_stok = "SELECT 
                     s.id_stok, s.stok_akhir, s.stok_minimum, s.updated_at,
                     o.id_obat, o.kode_obat, o.nama_obat, o.satuan,
@@ -107,7 +102,7 @@ try {
                     o.nama_obat ASC
                 LIMIT ? OFFSET ?";
     
-    $params_data = $params; // Copy $params
+    $params_data = $params; 
     $params_data[] = $data_per_halaman;
     $params_data[] = $offset;
 
@@ -118,12 +113,9 @@ try {
 } catch (PDOException $e) {
     die("Error mengambil data: " . $e->getMessage());
 }
-// --- SAMPAI SINI LOGIC BACKEND AMAN ---
 
-// 6. Panggil "Kepala" (Template Header)
 include '../templates/header.php';
-// Panggil Sidebar (jika terpisah)
-// include '../templates/sidebar.php';
+
 ?>
 
 <div class="container-fluid">
@@ -230,15 +222,15 @@ include '../templates/header.php';
                                 <?php else: ?>
                                     <?php foreach ($stoks as $stok): ?>
                                         <?php
-                                            // [PERBAIKAN] Logic untuk status stok kritis
+                                          
                                             $status_badge = '<span class="badge badge-success">Aman</span>';
-                                            $tr_class = ''; // Default
+                                            $tr_class = ''; 
                                             if ($stok['stok_akhir'] == 0) {
                                                 $status_badge = '<span class="badge badge-danger">Habis</span>';
-                                                $tr_class = 'table-danger'; // Class Bootstrap
+                                                $tr_class = 'table-danger';
                                             } elseif ($stok['stok_akhir'] < $stok['stok_minimum']) {
                                                 $status_badge = '<span class="badge badge-warning">Menipis</span>';
-                                                $tr_class = 'table-warning'; // Class Bootstrap
+                                                $tr_class = 'table-warning'; 
                                             }
                                         ?>
                                         <tr class="<?php echo $tr_class; ?>">
@@ -261,7 +253,7 @@ include '../templates/header.php';
                     <nav aria-label="Navigasi Halaman" class="mt-3">
                         <ul class="pagination justify-content-center">
                             <?php
-                            // Siapkan parameter URL agar filter tetap menempel
+                            
                             $query_params = [];
                             if (!empty($search_nama)) $query_params['search'] = $search_nama;
                             if (!empty($filter_kategori)) $query_params['kategori'] = $filter_kategori;
@@ -269,7 +261,7 @@ include '../templates/header.php';
                                 $query_params['unit'] = $filter_unit_id;
                             }
                             
-                            // Tombol "Sebelumnya"
+                            
                             if ($halaman_saat_ini > 1) {
                                 $query_params['halaman'] = $halaman_saat_ini - 1;
                                 echo '<li class="page-item"><a class="page-link" href="?' . http_build_query($query_params) . '">&laquo; Sebelumnya</a></li>';
@@ -277,10 +269,10 @@ include '../templates/header.php';
                                 echo '<li class="page-item disabled"><span class="page-link">&laquo; Sebelumnya</span></li>';
                             }
 
-                            // Tampilkan Info Halaman (Versi simple)
+                            
                             echo '<li class="page-item active" aria-current="page"><span class="page-link">Halaman ' . $halaman_saat_ini . ' dari ' . $total_halaman . '</span></li>';
 
-                            // Tombol "Berikutnya"
+                            
                             if ($halaman_saat_ini < $total_halaman) {
                                 $query_params['halaman'] = $halaman_saat_ini + 1;
                                 echo '<li class="page-item"><a class="page-link" href="?' . http_build_query($query_params) . '">Berikutnya &raquo;</a></li>';
@@ -298,7 +290,7 @@ include '../templates/header.php';
 
 </div>
 <?php
-// 8. Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php';
 ?>
 
@@ -308,7 +300,7 @@ include '../templates/footer.php';
 
 <script>
 $(document).ready(function() {
-    // Aktifkan Select2 untuk dropdown filter
+    
     $('.select2-filter').select2({
         width: '100%'
     });

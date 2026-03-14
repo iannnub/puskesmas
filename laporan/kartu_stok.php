@@ -64,7 +64,6 @@ try {
 include '../templates/header.php';
 ?>
 
-<!-- CSS Fix Select2 / layout -->
 <style>
 .select2-container .select2-selection--single {
     height: calc(2.25rem + 2px) !important;
@@ -163,7 +162,7 @@ include '../templates/header.php';
                         </tr>
 
                         <?php
-                        // Pastikan $saldo selalu terdefinisi
+                        
                         $saldo = $stok_awal;
                         if (empty($logs)):
                         ?>

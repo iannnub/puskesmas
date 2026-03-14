@@ -1,37 +1,32 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
+
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
-// Hanya SUPER ADMIN (Role ID 1) yang boleh mengakses halaman ini
 if ($_SESSION['role_id'] != 1) {
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
 $page_title = "Kelola Data Unit (Lokasi Stok)";
 
-// 5. Logic untuk AMBIL DATA (READ)
+
 try {
-    // Ambil semua data unit untuk ditampilkan di tabel
+
     $sql_unit = "SELECT * FROM tbl_unit ORDER BY id_unit ASC";
     $stmt_unit_list = $pdo->query($sql_unit);
     $units = $stmt_unit_list->fetchAll();
 
 } catch (PDOException $e) {
-    // Tangani error jika query gagal
+
     die("Error mengambil data: " . $e->getMessage());
 }
 
-// 6. Panggil "Kepala" (Template Header)
-// (header.php OTOMATIS memanggil sidebar.php)
+
 include '../templates/header.php';
-// [PERBAIKAN] Hapus panggil sidebar ganda
-// include '../templates/sidebar.php'; 
+
 ?>
 
 <main class="content">
@@ -128,6 +123,6 @@ include '../templates/header.php';
 
 </main>
 <?php
-// 8. Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php';
 ?>

@@ -1,56 +1,49 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
-// Hanya SUPER ADMIN (Role ID 1) dan ADMIN (Role ID 2) yang boleh
 if ($_SESSION['role_id'] != 1 && $_SESSION['role_id'] != 2) {
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin atau Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
 $page_title = "Laporan Bulanan (Rekap Stok & Pemakaian per Poli)";
 
-// 5. [PERBAIKAN] Logic untuk AMBIL DATA (READ) + FILTER
-// [PERBAIKAN] Ganti '??' dengan 'isset()'
-$filter_bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m'); // Default ke bulan ini
+$filter_bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m'); 
 
-// Variabel untuk menampung data query
+
 $polis_depan = [];
 $obat_list = [];
 $data_keluar_pivot = [];
 $data_masuk_pivot = [];
 $data_stok_awal_pivot = [];
-$total_stok_keluar_per_poli = []; // Untuk TFOOT
+$total_stok_keluar_per_poli = []; 
 
 try {
-    // [A] Ambil daftar Poli DEPAN (untuk header tabel)
-    // Asumsi Poli Depan (ambil stok Apotek) adalah yang ingin ditampilkan
+    
     $stmt_poli = $pdo->query("SELECT id_poli, nama_poli FROM tbl_poli WHERE id_unit_stok_default = 2 ORDER BY id_poli ASC");
     $polis_depan = $stmt_poli->fetchAll();
     
-    // Inisialisasi array total footer
+  
     $total_stok_keluar_per_poli = array_fill_keys(array_column($polis_depan, 'id_poli'), 0);
-    // [LOGIKA BARU] Tambahkan "Lainnya" untuk Poli Belakang (UGD, dll)
+   
     $total_stok_keluar_per_poli['lainnya'] = 0;
 
     
-    // [B] JIKA user sudah memfilter, jalankan query laporan
+    
     if (isset($_GET['bulan'])) {
         
-        // Tentukan tanggal awal dan akhir periode
+        
         $tgl_awal_bulan = $filter_bulan . "-01 00:00:00";
         $tgl_akhir_bulan = $filter_bulan . "-" . date('t', strtotime($tgl_awal_bulan)) . " 23:59:59"; 
 
-        // [C] Ambil daftar Obat (basis laporan)
+      
         $stmt_obat = $pdo->query("SELECT id_obat, kode_obat, nama_obat FROM tbl_obat ORDER BY nama_obat ASC");
         $obat_list = $stmt_obat->fetchAll();
 
-        // [D] Query 1: Ambil data KELUAR (PIVOT)
+        
         $sql_keluar = "SELECT 
                            rh.id_poli, 
                            rd.id_obat, 
@@ -70,24 +63,24 @@ try {
         $stmt_keluar->execute([$tgl_awal_bulan, $tgl_akhir_bulan]);
         $data_keluar_raw = $stmt_keluar->fetchAll();
         
-        // [LOGIKA BARU] Ubah data mentah menjadi array pivot
+        
         foreach ($data_keluar_raw as $data) {
             $id_obat = $data['id_obat'];
             $id_poli = $data['id_poli'];
             $id_unit_asal = $data['id_unit_stok_default'];
             $total = $data['total_keluar'];
             
-            // [LOGIKA PIVOT] Cek apakah ini Poli Depan (unit 2) atau Poli Belakang (unit lain)
+           
             if ($id_unit_asal == 2) {
-                // Jika Poli Depan (Umum, Gigi, dll)
+              
                 $data_keluar_pivot[$id_obat][$id_poli] = (isset($data_keluar_pivot[$id_obat][$id_poli]) ? $data_keluar_pivot[$id_obat][$id_poli] : 0) + $total;
             } else {
-                // Jika Poli Belakang (UGD, Rawat Inap, dll), gabung ke kolom "Lainnya"
+                
                 $data_keluar_pivot[$id_obat]['lainnya'] = (isset($data_keluar_pivot[$id_obat]['lainnya']) ? $data_keluar_pivot[$id_obat]['lainnya'] : 0) + $total;
             }
         }
 
-        // [E] Query 2: Ambil data MASUK (Hanya ke GUDANG)
+        
         $sql_masuk = "SELECT 
                           id_obat, 
                           SUM(masuk) as total_masuk 
@@ -96,7 +89,7 @@ try {
                       WHERE 
                           (sumber_data = 'Penerimaan' OR sumber_data = 'Stok Opname') 
                           AND masuk > 0 
-                          AND id_unit = 1 -- Hanya GUDANG
+                          AND id_unit = 1 
                           AND (tgl_log BETWEEN ? AND ?)
                       GROUP BY 
                           id_obat";
@@ -107,14 +100,14 @@ try {
             $data_masuk_pivot[$data['id_obat']] = $data['total_masuk'];
         }
 
-        // [F] Query 3: Ambil data STOK AWAL (Hanya GUDANG)
+      
         $sql_stok_awal = "SELECT 
                               id_obat, 
                               SUM(masuk) - SUM(keluar) AS stok_awal 
                           FROM 
                               tbl_log_stok 
                           WHERE 
-                              id_unit = 1 -- Hanya GUDANG
+                              id_unit = 1 
                               AND tgl_log < ?
                           GROUP BY 
                               id_obat";
@@ -130,9 +123,9 @@ try {
     die("Error mengambil data: " . $e->getMessage());
 }
 
-// 6. Panggil Header & Sidebar
+
 include '../templates/header.php';
-// (Kita HAPUS 'include sidebar.php' ganda dari sini)
+
 ?>
 
 <main class="content">
@@ -162,7 +155,7 @@ include '../templates/header.php';
         </div>
     </div>
 
-    <?php if (isset($_GET['bulan'])): // Tampilkan hanya jika sudah difilter ?>
+    <?php if (isset($_GET['bulan'])):  ?>
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">
@@ -205,7 +198,7 @@ include '../templates/header.php';
                             </tr>
                         <?php else: ?>
                             <?php 
-                            // Inisialisasi Grand Total
+                            
                             $grand_total_stok_awal = 0;
                             $grand_total_masuk = 0;
                             $grand_total_stok_akhir = 0;
@@ -215,28 +208,28 @@ include '../templates/header.php';
                                 <?php
                                 $id_obat = $obat['id_obat'];
                                 
-                                // [LOGIKA PHP] Ambil data dari array pivot
+                               
                                 $stok_awal = isset($data_stok_awal_pivot[$id_obat]) ? $data_stok_awal_pivot[$id_obat] : 0;
                                 $masuk = isset($data_masuk_pivot[$id_obat]) ? $data_masuk_pivot[$id_obat] : 0;
                                 
                                 $total_keluar_per_obat = 0;
                                 
-                                // Hitung total keluar per obat (dari semua poli)
+                                
                                 if (isset($data_keluar_pivot[$id_obat])) {
                                     $total_keluar_per_obat = array_sum($data_keluar_pivot[$id_obat]);
                                 }
                                 
-                                // Hitung Stok Akhir
+                               
                                 $stok_akhir = $stok_awal + $masuk - $total_keluar_per_obat;
                                 
-                                // Optimasi: Hanya tampilkan baris jika ada aktivitas
+                               
                                 if ($stok_awal == 0 && $masuk == 0 && $total_keluar_per_obat == 0 && $stok_akhir == 0) {
-                                    continue; // Lewati obat ini jika tidak ada transaksi
+                                    continue; 
                                 }
 
-                                $ada_data = true; // Tandai bahwa kita punya data untuk ditampilkan
+                                $ada_data = true; 
                                 
-                                // Update Grand Total
+                              
                                 $grand_total_stok_awal += $stok_awal;
                                 $grand_total_masuk += $masuk;
                                 $grand_total_stok_akhir += $stok_akhir;
@@ -252,7 +245,7 @@ include '../templates/header.php';
                                         <?php 
                                         $id_poli = $poli['id_poli'];
                                         $keluar_per_poli = isset($data_keluar_pivot[$id_obat][$id_poli]) ? $data_keluar_pivot[$id_obat][$id_poli] : 0;
-                                        // Update total footer per poli
+                                       
                                         $total_stok_keluar_per_poli[$id_poli] += $keluar_per_poli;
                                         ?>
                                         <td class="text-right"><?php echo ($keluar_per_poli > 0) ? $keluar_per_poli : ''; ?></td>
@@ -268,7 +261,7 @@ include '../templates/header.php';
                                 </tr>
                             <?php endforeach; ?>
                             
-                            <?php if (!$ada_data): // Jika loop selesai tapi tidak ada data (semua 0) ?>
+                            <?php if (!$ada_data):  ?>
                                 <tr>
                                     <td colspan="<?php echo 4 + count($polis_depan) + 1 + 1; ?>" class="text-center">Tidak ada aktivitas stok pada periode ini.</td>
                                 </tr>
@@ -298,10 +291,10 @@ include '../templates/header.php';
             </div>
         </div>
     </div>
-    <?php endif; // Selesai blok "jika sudah difilter" ?>
+    <?php endif;  ?>
 
 </main>
 <?php 
-// Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php'; 
 ?>

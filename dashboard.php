@@ -1,41 +1,37 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once 'config.php';
 
-// 2. Panggil "satpam" auth_check.php
+
 require_once 'templates/auth_check.php';
 
-// 3. Set Judul Halaman
+
 $page_title = "Dashboard";
 
-// 4. [LOGIKA BARU] Ambil data untuk ringkasan (Cards)
+
 try {
-    // Hitung Total User
+
     $stmt_users = $pdo->query("SELECT COUNT(id_user) FROM tbl_user");
     $total_users = $stmt_users->fetchColumn();
 
-    // Hitung Total Item Obat (Master)
+
     $stmt_obat = $pdo->query("SELECT COUNT(id_obat) FROM tbl_obat");
     $total_obat = $stmt_obat->fetchColumn();
 
-    // Hitung Item Stok Kritis (stok_akhir < stok_minimum)
+
     $stmt_kritis = $pdo->query("SELECT COUNT(id_stok) FROM tbl_stok_inventori WHERE stok_akhir < stok_minimum AND stok_akhir > 0");
     $total_kritis = $stmt_kritis->fetchColumn();
     
-    // Hitung Item Stok Habis (stok_akhir = 0)
+
     $stmt_habis = $pdo->query("SELECT COUNT(id_stok) FROM tbl_stok_inventori WHERE stok_akhir = 0");
     $total_habis = $stmt_habis->fetchColumn();
 
 } catch (PDOException $e) {
-    // Jika query gagal, set data ke 0
+
     $total_users = $total_obat = $total_kritis = $total_habis = 0;
-    // (Opsional) Catat error
-    // error_log($e->getMessage());
+
 }
 
-
-// 5. Panggil "Kepala" (Template Header)
-// (header.php OTOMATIS memanggil sidebar.php)
 include 'templates/header.php';
 
 ?>
@@ -123,6 +119,6 @@ include 'templates/header.php';
     </div>
     </main>
 <?php
-// 6. Panggil "Kaki" (Template Footer)
+
 include 'templates/footer.php';
 ?>

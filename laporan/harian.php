@@ -1,22 +1,18 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
 if ($_SESSION['role_id'] != 1 && $_SESSION['role_id'] != 2) {
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin atau Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
 $page_title = "Laporan Pemakaian Harian";
 
-// 5. [PERBAIKAN] Logic untuk AMBIL DATA (READ) + FILTER
-$laporan_harian = []; // Array untuk menampung hasil
-$filter_tgl = isset($_GET['tgl']) ? $_GET['tgl'] : date('Y-m-d'); // Default ke hari ini
+$laporan_harian = []; 
+$filter_tgl = isset($_GET['tgl']) ? $_GET['tgl'] : date('Y-m-d'); 
 
 try {
     if (isset($_GET['tgl'])) { 
@@ -50,7 +46,7 @@ try {
     die("Error mengambil data: " . $e->getMessage());
 }
 
-// 6. Panggil Header & Sidebar
+
 include '../templates/header.php';
 ?>
 
@@ -82,7 +78,7 @@ include '../templates/header.php';
         </div>
     </div>
 
-    <?php if (isset($_GET['tgl'])): // Tampilkan hanya jika sudah difilter ?>
+    <?php if (isset($_GET['tgl'])): ?>
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">
@@ -123,13 +119,13 @@ include '../templates/header.php';
                         <?php else: ?>
                             <?php foreach ($laporan_harian as $index => $data): ?>
                                 <?php
-                                // Logic untuk menampilkan Total per Obat
+                                
                                 if ($current_obat != $data['nama_obat'] && $current_obat !== null) {
                                     echo '<tr class="table-secondary font-weight-bold">';
                                     echo '<td colspan="3" class="text-right">' . htmlspecialchars($current_obat) . ' Total</td>';
                                     echo '<td class="text-right">' . $total_obat . '</td>';
                                     echo '</tr>';
-                                    $total_obat = 0; // Reset total
+                                    $total_obat = 0; 
                                 }
                                 $current_obat = $data['nama_obat'];
                                 $total_obat += $data['total_keluar'];
@@ -144,7 +140,7 @@ include '../templates/header.php';
                                 </tr>
 
                                 <?php 
-                                // Jika ini adalah baris TERAKHIR, cetak total terakhir
+                                
                                 if ($index == count($laporan_harian) - 1): 
                                 ?>
                                     <tr class="table-secondary font-weight-bold">
@@ -169,10 +165,10 @@ include '../templates/header.php';
             </div>
         </div>
     </div>
-    <?php endif; // Selesai blok "jika sudah difilter" ?>
+    <?php endif;  ?>
 
 </main>
 <?php 
-// Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php'; 
 ?>

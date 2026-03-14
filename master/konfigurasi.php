@@ -1,39 +1,34 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
+
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
-// Hanya SUPER ADMIN (Role ID 1) yang boleh mengakses halaman ini
 if ($_SESSION['role_id'] != 1) {
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
 $page_title = "Konfigurasi Sistem";
 
-// 5. Logic untuk AMBIL DATA (READ)
+
 try {
-    // Ambil SEMUA setting dari tbl_konfigurasi
+
     $stmt = $pdo->query("SELECT setting_key, setting_value FROM tbl_konfigurasi");
     $all_settings = $stmt->fetchAll();
     
-    // [KUNCI LOGIKA] Ubah array-nya agar gampang dipakai di HTML
+
     $konfigurasi = [];
     foreach ($all_settings as $setting) {
         $konfigurasi[$setting['setting_key']] = $setting['setting_value'];
     }
 
 } catch (PDOException $e) {
-    // Tangani error jika query gagal
+
     die("Error mengambil data konfigurasi: " . $e->getMessage());
 }
 
-// 6. Panggil "Kepala" (Template Header)
-// (header.php OTOMATIS memanggil sidebar.php)
 include '../templates/header.php';
 
 ?>
@@ -100,6 +95,6 @@ include '../templates/header.php';
 
 </main>
 <?php
-// 8. Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php';
 ?>

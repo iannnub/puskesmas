@@ -1,42 +1,35 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
+
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
-// Hanya SUPER ADMIN (Role ID 1) yang boleh mengakses halaman ini
 if ($_SESSION['role_id'] != 1) {
-    // Jika bukan Super Admin, tendang paksa
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
 $page_title = "Kelola Akun User";
 
-// 5. [LOGIKA BARU] Logic untuk AMBIL DATA (READ)
+
 try {
-    // Ambil data Role (Ini tetap sama)
+
     $stmt_role = $pdo->query("SELECT id_role, nama_role FROM tbl_role ORDER BY nama_role ASC");
     $roles = $stmt_role->fetchAll();
 
-    // Ambil data Poli Depan (Asumsi ID 2 = APOTEK dari tbl_unit)
     $stmt_poli_depan = $pdo->query("SELECT id_poli, nama_poli 
                                    FROM tbl_poli 
                                    WHERE id_unit_stok_default = 2 
                                    ORDER BY nama_poli ASC");
     $polis_depan = $stmt_poli_depan->fetchAll();
 
-    // Ambil data Poli Belakang (ID Unit BUKAN 1 atau 2)
     $stmt_poli_belakang = $pdo->query("SELECT id_poli, nama_poli 
                                       FROM tbl_poli 
                                       WHERE id_unit_stok_default NOT IN (1, 2) 
                                       ORDER BY nama_poli ASC");
     $polis_belakang = $stmt_poli_belakang->fetchAll();
 
-    // Ambil semua data user untuk ditampilkan di tabel (Ini tetap sama)
     $sql_users = "SELECT 
                     u.*, 
                     r.nama_role,
@@ -53,13 +46,12 @@ try {
     $users = $stmt_users->fetchAll();
 
 } catch (PDOException $e) {
-    // Tangani error jika query gagal
+
     die("Error mengambil data: " . $e->getMessage());
 }
 
-// 6. Panggil "Kepala" (Template Header)
 include '../templates/header.php';
-// (Sidebar.php dipanggil OTOMATIS oleh header.php)
+
 ?>
 
 <main class="content">
@@ -204,63 +196,62 @@ include '../templates/header.php';
 </main>
 <script>
 $(document).ready(function() {
-    // --- 1. "Amunisi" Data dari PHP ---
+    
     const polisDepan = <?php echo json_encode($polis_depan); ?>;
     const polisBelakang = <?php echo json_encode($polis_belakang); ?>;
 
-    // --- 2. "Tangkap" Elemen HTML ---
-    const roleDropdown = $('#id_role'); // Pakai jQuery
+    
+    const roleDropdown = $('#id_role'); 
     const poliRow = $('#baris_terkait_poli');
     const poliDropdown = $('#id_poli');
 
-    // --- 3. Buat Fungsi "Pengisi Dropdown" ---
+    
     function updatePoliOptions(poliList) {
-        poliDropdown.empty(); // Kosongkan dropdown
+        poliDropdown.empty(); 
         
-        // Tambahkan opsi default
+       
         poliDropdown.append(new Option('-- Pilih Poli Terkait --', ''));
 
-        // Isi dropdown dengan list poli yang sesuai
+        
         $.each(poliList, function (index, poli) {
             poliDropdown.append(new Option(poli.nama_poli, poli.id_poli));
         });
     }
 
-    // --- 4. Upgrade Fungsi "Satpam" (togglePoliDropdown) ---
+    
     function togglePoliDropdown() {
         const selectedRole = roleDropdown.val();
 
-        // Cek Role ID
+        
         if (selectedRole == '1' || selectedRole == '2' || selectedRole == '') {
-            // ROLE: Super Admin / Admin / Belum Dipilih
-            poliRow.hide(); // Sembunyikan baris
-            poliDropdown.prop('required', false); // Tidak wajib
-            poliDropdown.empty(); // Kosongkan total
+           
+            poliRow.hide(); 
+            poliDropdown.prop('required', false); 
+            poliDropdown.empty();
             
-            // PENTING: Tambahkan 1 opsi "NULL"
+            
             poliDropdown.append(new Option('-- Tidak Terkait Poli --', 'NULL'));
 
         } else if (selectedRole == '3') {
-            // ROLE: Poli Depan
-            poliRow.show(); // Tampilkan baris
-            poliDropdown.prop('required', true); // Wajib diisi
-            updatePoliOptions(polisDepan);      // Isi dengan Poli Depan
+            
+            poliRow.show(); 
+            poliDropdown.prop('required', true); 
+            updatePoliOptions(polisDepan);    
 
         } else if (selectedRole == '4') {
-            // ROLE: Poli Belakang
-            poliRow.show(); // Tampilkan baris
-            poliDropdown.prop('required', true); // Wajib diisi
-            updatePoliOptions(polisBelakang);   // Isi dengan Poli Belakang
+            
+            poliRow.show(); 
+            poliDropdown.prop('required', true); 
+            updatePoliOptions(polisBelakang);   
         }
     }
 
-    // --- 5. Pasang "Satpam" & Jalankan ---
+
     roleDropdown.on('change', togglePoliDropdown);
-    
-    // Jalankan "Satpam" sekali saat halaman dimuat
+
     togglePoliDropdown();
     
-    // [REFACTOR] Terapkan Select2 ke dropdown (agar konsisten)
+
     if (typeof $().select2 === 'function') {
         $('#id_role').select2({ theme: 'bootstrap4', width: '100%' });
         $('#id_poli').select2({ theme: 'bootstrap4', width: '100%' });
@@ -270,6 +261,6 @@ $(document).ready(function() {
 
 
 <?php
-// 8. Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php';
 ?>

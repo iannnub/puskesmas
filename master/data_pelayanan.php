@@ -1,34 +1,32 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
+
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
-// Hanya SUPER ADMIN (Role ID 1) yang boleh mengakses halaman ini
+
 if ($_SESSION['role_id'] != 1) {
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
+
 $page_title = "Kelola Data Pelayanan";
 
-// 5. Logic untuk AMBIL DATA (READ)
+
 try {
-    // Ambil semua data pelayanan untuk ditampilkan di tabel
+    
     $sql_pelayanan = "SELECT * FROM tbl_pelayanan ORDER BY id_pelayanan ASC";
     $stmt_pelayanan_list = $pdo->query($sql_pelayanan);
     $pelayanans = $stmt_pelayanan_list->fetchAll();
 
 } catch (PDOException $e) {
-    // Tangani error jika query gagal
+   
     die("Error mengambil data: " . $e->getMessage());
 }
 
-// 6. Panggil "Kepala" (Template Header)
-// (header.php OTOMATIS memanggil sidebar.php)
+
 include '../templates/header.php';
 
 ?>
@@ -127,6 +125,6 @@ include '../templates/header.php';
 
 </main>
 <?php
-// 8. Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php';
 ?>

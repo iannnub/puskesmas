@@ -1,36 +1,28 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
-// Hanya POLI BELAKANG (Role ID 4) yang boleh mengakses halaman ini
 if ($_SESSION['role_id'] != 4) {
     echo "<script>alert('Akses Ditolak! Fitur ini hanya untuk Poli Belakang.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
 $page_title = "Buat Request Stok Obat";
 
-// 5. [LOGIKA BACKEND UTAMA]
-// --- TIDAK ADA YANG DIUBAH DARI SINI ---
+
 try {
-    // 🔹 Ambil semua obat (1117+) untuk dropdown Select2 Client-Side
+    
     $stmt_obat = $pdo->query("SELECT id_obat, kode_obat, nama_obat FROM tbl_obat ORDER BY id_obat ASC");
     $all_obats = $stmt_obat->fetchAll();
 
 } catch (PDOException $e) {
     die("Error mengambil data: " . $e->getMessage());
 }
-// --- SAMPAI SINI LOGIC BACKEND AMAN ---
 
-// 6. Panggil Header & Sidebar
 include '../templates/header.php';
-// Panggil Sidebar (jika terpisah)
-// include '../templates/sidebar.php';
+
 ?>
 
 <div class="container-fluid">
@@ -137,7 +129,7 @@ include '../templates/header.php';
     </div>
 </div>
 <?php 
-// Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php'; 
 ?>
 
@@ -146,12 +138,12 @@ include '../templates/footer.php';
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
-    // [KUNCI] Cache 1117+ obat ke JavaScript (Logic kamu sudah perfect)
+    
     const daftarObatHTML = <?php echo json_encode(array_map(function($obat) {
         return '<option value="' . $obat['id_obat'] . '">' . htmlspecialchars($obat['kode_obat'] . ' - ' . $obat['nama_obat']) . '</option>';
     }, $all_obats)); ?>.join('');
 
-    // Fungsi "ajaib" untuk mengaktifkan Select2 (Client-Side)
+   
     function inisialisasiSelect2Obat(element) {
         $(element).select2({
             width: '100%',
@@ -161,13 +153,13 @@ include '../templates/footer.php';
 
     $(document).ready(function() {
         
-        // --- 1. Aktifkan Select2 (Client-Side) untuk baris obat PERTAMA
+        
         inisialisasiSelect2Obat('.obat-select');
 
-        // --- 2. Logic untuk Tombol "+ Tambah Obat Lain"
+       
         $('#tambah_baris_obat').click(function() {
             
-            // [PERBAIKAN] Template baris baru yang sudah full Bootstrap
+            
             var barisBaru = `
                 <tr>
                     <td>
@@ -189,30 +181,30 @@ include '../templates/footer.php';
             
             $('#tbody_detail_request').append(barisBaru);
             
-            // Aktifkan Select2 di baris baru
+            
             inisialisasiSelect2Obat('.obat-select-baru:last');
         });
 
-        // --- 3. Logic untuk Tombol "Hapus" (Event Delegation)
+       
         $('#tbody_detail_request').on('click', '.hapus-baris', function() {
             $(this).closest('tr').remove();
         });
 
-        // --- 4. Reset form otomatis setelah sukses (Logic kamu sudah perfect)
+        
         <?php if (isset($_GET['status']) && $_GET['status'] == 'tambah_sukses'): ?>
             var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
             window.history.pushState({path:newUrl}, '', newUrl);
 
             setTimeout(() => {
                 $('#formRequest')[0].reset();
-                // Hapus semua baris obat tambahan, sisakan 1 baris
+                
                 $('#tbody_detail_request').find('tr:gt(0)').remove();
-                // Reset Select2 di baris pertama
+                
                 $('.obat-select').val(null).trigger('change');
             }, 500);
         <?php endif; ?>
 
-        // --- 5. Logic 'gagal' (Reset URL) ---
+        
         <?php if (isset($_GET['status']) && $_GET['status'] == 'gagal'): ?>
             var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
             window.history.pushState({path:newUrl}, '', newUrl);

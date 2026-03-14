@@ -1,35 +1,29 @@
 <?php
-// 1. Panggil "jantung" config.php
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
-// Hanya SUPER ADMIN (Role ID 1) dan ADMIN (Role ID 2) yang boleh
+
 if ($_SESSION['role_id'] != 1 && $_SESSION['role_id'] != 2) {
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin atau Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
+
 $page_title = "Transfer Stok Internal";
 
-// [UPGRADE] Ambil ID baru dari URL (untuk highlight)
 $new_id = $_GET['new_id'] ?? null;
 
-// 5. [LOGIKA BACKEND UTAMA]
-// --- TIDAK ADA YANG DIUBAH DARI SINI ---
+
 try {
-    // 🔹 Ambil semua obat (untuk dropdown) - Urut ID
+
     $stmt_obat = $pdo->query("SELECT id_obat, kode_obat, nama_obat FROM tbl_obat ORDER BY id_obat ASC");
     $obats = $stmt_obat->fetchAll();
 
-    // 🔹 Ambil semua unit (untuk 2 dropdown: Asal & Tujuan)
     $stmt_unit = $pdo->query("SELECT id_unit, nama_unit FROM tbl_unit ORDER BY nama_unit ASC");
     $units = $stmt_unit->fetchAll();
 
-    // 🔹 Ambil 20 data transfer terakhir
+
     $sql_riwayat = "SELECT 
                         t.id_transfer, t.tgl_transfer, o.nama_obat, t.jumlah,
                         unit_asal.nama_unit AS nama_unit_asal,
@@ -54,12 +48,11 @@ try {
 } catch (PDOException $e) {
     die("Error mengambil data: " . $e->getMessage());
 }
-// --- SAMPAI SINI LOGIC BACKEND AMAN ---
 
-// 6. Panggil Header & Sidebar
+
+
 include '../templates/header.php';
-// Panggil Sidebar (jika terpisah)
-// include '../templates/sidebar.php';
+
 ?>
 
 <div class="container-fluid">
@@ -195,7 +188,7 @@ include '../templates/header.php';
     </div>
 </div>
 <?php 
-// Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php'; 
 ?>
 
@@ -206,24 +199,24 @@ include '../templates/footer.php';
 <script>
 $(document).ready(function() {
     
-    // --- (PERBAIKAN) Aktifkan Select2 ---
+ 
     $('#id_obat').select2({
         placeholder: "-- Pilih / Cari Obat --",
-        width: '100%' // [PERBAIKAN] ganti 93% jadi 100%
+        width: '100%' 
     });
 
-    // [PERBAIKAN] Kita pakai class selector
+
     $('.select2-unit').select2({
-        placeholder: "Pilih Unit", // Placeholder akan diganti oleh dropdown
-        width: '100%', // [PERBAIKAN] ganti 93% jadi 100%
-        minimumResultsForSearch: Infinity // Sembunyikan search bar
+        placeholder: "Pilih Unit",
+        width: '100%', 
+        minimumResultsForSearch: Infinity 
     });
     
-    // --- Logic Reset form kamu ---
+    
     <?php if (isset($_GET['status']) && $_GET['status'] == 'tambah_sukses'): ?>
         var currentUrl = "<?php echo BASE_URL . 'stok/transfer.php'; ?>";
         <?php if ($new_id): ?>
-             // Jika ada new_id, arahkan ke URL dengan new_id agar highlight tetap ada
+             
              currentUrl = currentUrl + "?new_id=<?php echo $new_id; ?>";
         <?php endif; ?>
 
@@ -237,7 +230,7 @@ $(document).ready(function() {
         }, 500);
     <?php endif; ?>
 
-    // --- Logic 'gagal' ---
+ 
     <?php if (isset($_GET['status']) && $_GET['status'] == 'gagal'): ?>
         var cleanUrl = "<?php echo BASE_URL . 'stok/transfer.php'; ?>";
         window.history.pushState({path: cleanUrl}, '', cleanUrl);

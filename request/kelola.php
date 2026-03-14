@@ -1,36 +1,28 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
 if ($_SESSION['role_id'] != 1 && $_SESSION['role_id'] != 2) {
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin atau Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
 $page_title = "Kelola Request Stok Internal";
 
-// 5. [LOGIKA BACKEND UTAMA]
-// --- TIDAK ADA YANG DIUBAH DARI SINI ---
 try {
-    // [A] Ambil data User Poli Belakang (Role 4) untuk dropdown filter
+
     $stmt_users_poli = $pdo->query("SELECT id_user, nama_lengkap 
                                     FROM tbl_user 
                                     WHERE id_role = 4 
                                     ORDER BY nama_lengkap ASC");
     $poli_belakang_users = $stmt_users_poli->fetchAll();
-    
-    // [B] Ambil nilai filter dari URL
+
     $filter_user_id = $_GET['filter_user'] ?? '';
-    
-    // [PERUBAHAN BARU] Ambil filter status, default-nya 'Pending'
+
     $filter_status = $_GET['status_filter'] ?? 'Pending'; 
 
-    // 🔹 Siapkan query dasar
     $sql_base = "FROM 
                     tbl_request_header h
                 JOIN 
@@ -40,28 +32,24 @@ try {
                 LEFT JOIN
                     tbl_user u_app ON h.id_user_approve = u_app.id_user";
     
-    $where_conditions = []; // Array untuk menampung kondisi WHERE
-    $params = []; // Array untuk menampung parameter PDO
+    $where_conditions = []; 
+    $params = []; 
 
-    // [C] Tambahkan kondisi filter USER jika dipilih
     if (!empty($filter_user_id)) {
         $where_conditions[] = "h.id_user_request = ?";
         $params[] = $filter_user_id;
     }
 
-    // [PERUBAHAN BARU] Tambahkan kondisi filter STATUS jika dipilih
     if (!empty($filter_status)) {
         $where_conditions[] = "h.status = ?";
         $params[] = $filter_status;
     }
 
-    // Gabungkan kondisi WHERE jika ada
     $sql_where = "";
     if (!empty($where_conditions)) {
         $sql_where = " WHERE " . implode(" AND ", $where_conditions);
     }
-    
-    // 🔹 Ambil data request
+
     $sql_requests = "SELECT 
                         h.id_request, h.tgl_request, h.status, h.tgl_approve,
                         u_req.nama_lengkap AS nama_pemohon,
@@ -69,7 +57,7 @@ try {
                         u_app.nama_lengkap AS nama_approver
                     " . $sql_base . $sql_where . "
                     ORDER BY 
-                        h.id_request ASC"; // [PERUBAHAN] Diurutkan by ID ASC
+                        h.id_request ASC";
     
     $stmt_requests = $pdo->prepare($sql_requests);
     $stmt_requests->execute($params);
@@ -78,12 +66,8 @@ try {
 } catch (PDOException $e) {
     die("Error mengambil data: " . $e->getMessage());
 }
-// --- SAMPAI SINI LOGIC BACKEND AMAN ---
 
-// 6. Panggil Header & Sidebar
 include '../templates/header.php';
-// Panggil Sidebar (jika terpisah)
-// include '../templates/sidebar.php';
 ?>
 
 <div class="container-fluid">
@@ -91,7 +75,7 @@ include '../templates/header.php';
     <h1 class="h3 mb-4 text-gray-800"><?php echo htmlspecialchars($page_title); ?></h1>
     <p class="mb-4">Halaman ini menampilkan antrian permintaan stok dari unit Poli Belakang (UGD, Rawat Inap, dll).</p>
 
-    <?php if (isset($_GET['status_aksi'])): // Ganti nama agar tidak konflik ?>
+    <?php if (isset($_GET['status_aksi'])):  ?>
         <?php if ($_GET['status_aksi'] == 'sukses_approve'): ?>
             <div class="alert alert-success" role="alert">
                 Request berhasil diproses! Stok telah ditransfer.
@@ -180,7 +164,7 @@ include '../templates/header.php';
                                             <td><?php echo htmlspecialchars($req['nama_unit_tujuan']); ?></td>
                                             <td>
                                                 <?php
-                                                // [PERBAIKAN] Ganti style inline dengan Badge
+                                               
                                                 $status = $req['status'];
                                                 $badge_class = 'badge-secondary';
                                                 if ($status == 'Pending') $badge_class = 'badge-warning';
@@ -227,7 +211,7 @@ include '../templates/header.php';
     </div>
 </div>
 <?php 
-// Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php'; 
 ?>
 
@@ -238,10 +222,9 @@ include '../templates/footer.php';
 <script>
 $(document).ready(function() {
     
-    // --- 1. Aktifkan DataTables ---
-    // (Ini HANYA akan jalan jika kamu sudah benerin header.php & footer.php)
+    
     $('#dataTable').DataTable({
-        "order": [[ 0, "asc" ]], // Sesuai 'ORDER BY id_request ASC'
+        "order": [[ 0, "asc" ]], 
         "language": {
             "search": "Cari:",
             "lengthMenu": "Tampilkan _MENU_ data",
@@ -258,7 +241,7 @@ $(document).ready(function() {
         }
     });
 
-    // --- 2. Aktifkan Select2 ---
+    
     $('.select2-user').select2({
         placeholder: "-- Semua Pemohon --",
         width: '100%'
@@ -266,14 +249,14 @@ $(document).ready(function() {
 
     $('.select2-static').select2({
         width: '100%',
-        minimumResultsForSearch: Infinity // Sembunyikan search bar
+        minimumResultsForSearch: Infinity
     });
     
-    // --- 3. Logic 'gagal' / 'sukses' (untuk reset URL) ---
+  
     <?php if (isset($_GET['status_aksi'])): ?>
-        // Hapus parameter 'status_aksi' & 'msg' dari URL
+        
         var cleanUrl = "<?php echo BASE_URL . 'request/kelola.php'; ?>";
-        // [PERBAIKAN] Pertahankan filter yang sedang aktif
+        
         var currentFilters = "<?php echo http_build_query(['filter_user' => $filter_user_id, 'status_filter' => $filter_status]); ?>";
         window.history.pushState({path: cleanUrl + '?' + currentFilters}, '', cleanUrl + '?' + currentFilters);
     <?php endif; ?>

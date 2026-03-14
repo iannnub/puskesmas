@@ -1,29 +1,23 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
 if ($_SESSION['role_id'] != 1 && $_SESSION['role_id'] != 2) {
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin atau Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
 $page_title = "Laporan Rekap Kunjungan (Pelayanan Resep)";
 
-// 5. [PERBAIKAN] Logic untuk AMBIL DATA (READ) + FILTER
-$laporan_kunjungan = []; // Array untuk menampung hasil
-// [PERBAIKAN] Ganti '??' dengan 'isset()' agar kompatibel
-$filter_bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m'); // Default ke bulan ini
+$laporan_kunjungan = []; 
+
+$filter_bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m');
 
 try {
     if (isset($_GET['bulan'])) { 
-        
-        // --- Query Utama: Mengambil rekap kunjungan harian ---
-        // Ini menggantikan sheet 'KUNJ'
+
         $sql_laporan = "SELECT 
                             DATE(rh.tgl_resep) AS tanggal,
                             SUM(CASE WHEN rh.id_pelayanan = 1 THEN 1 ELSE 0 END) AS total_umum,
@@ -47,7 +41,6 @@ try {
     die("Error mengambil data: " . $e->getMessage());
 }
 
-// 6. Panggil Header & Sidebar
 include '../templates/header.php';
 ?>
 
@@ -79,7 +72,7 @@ include '../templates/header.php';
         </div>
     </div>
 
-    <?php if (isset($_GET['bulan'])): // Tampilkan hanya jika sudah difilter ?>
+    <?php if (isset($_GET['bulan'])):  ?>
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">
@@ -151,10 +144,10 @@ include '../templates/header.php';
             </div>
         </div>
     </div>
-    <?php endif; // Selesai blok "jika sudah difilter" ?>
+    <?php endif;  ?>
 
 </main>
 <?php 
-// Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php'; 
 ?>

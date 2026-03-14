@@ -1,47 +1,38 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
 if ($_SESSION['role_id'] == 3) {
     echo "<script>alert('Akses Ditolak!'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
+
 $page_title = "Riwayat Request Stok";
 
-// 5. [LOGIKA UTAMA] AMBIL DATA (READ) + FILTER
-$riwayat_requests = []; // Array untuk menampung hasil
+$riwayat_requests = []; 
 
-// Ambil nilai filter dari URL (jika ada)
-// $filter_poli_id DIHAPUS
-$filter_user_id = $_GET['filter_user'] ?? ''; // HANYA INI FILTERNYA
+$filter_user_id = $_GET['filter_user'] ?? ''; 
 $filter_status = $_GET['status_filter'] ?? ''; 
 
 try {
-    // [A] Ambil data (untuk dropdown Filter Admin/Super Admin)
-    $poli_belakang_users = []; // HANYA user yg bisa request
+    
+    $poli_belakang_users = []; 
     
     if ($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2) {
         
-        // ===================================================================
-        // QUERY-NYA DI-UPGRADE:
-        // Ambil User (Role 4) + Langsung JOIN ke Nama Poli-nya
-        // ===================================================================
         $stmt_users_poli = $pdo->query("SELECT u.id_user, u.nama_lengkap, p.nama_poli 
                                         FROM tbl_user u
                                         JOIN tbl_poli p ON u.id_poli = p.id_poli
                                         WHERE u.id_role = 4 
                                         ORDER BY u.nama_lengkap ASC");
         $poli_belakang_users = $stmt_users_poli->fetchAll();
-        // ===================================================================
+        
     }
 
-    // [B] Bangun Query Dinamis
+
     $sql_base = "FROM 
                     tbl_request_header h
                 JOIN 
@@ -54,34 +45,30 @@ try {
     $where_conditions = []; 
     $params = []; 
 
-    // [C] (KUNCI LOGIKA RBAC) Tentukan Filter berdasarkan Role
+   
     if ($_SESSION['role_id'] == 4) {
-        // --- POLI BELAKANG (Role 4) ---
+        
         $where_conditions[] = "h.id_user_request = ?";
         $params[] = $_SESSION['user_id'];
     } else {
-        // --- ADMIN / SUPER ADMIN (Role 1 & 2) ---
-        
-        // Filter: Berdasarkan PEMOHON (Individu: Budi, Ani, dll)
         if (!empty($filter_user_id)) {
             $where_conditions[] = "h.id_user_request = ?";
             $params[] = $filter_user_id;
         }
     }
     
-    // [D] Terapkan filter STATUS
+   
     if (!empty($filter_status)) {
         $where_conditions[] = "h.status = ?";
         $params[] = $filter_status;
     }
 
-    // Gabungkan kondisi WHERE
+   
     $sql_where = "";
     if (!empty($where_conditions)) {
         $sql_where = " WHERE " . implode(" AND ", $where_conditions);
     }
     
-    // [E] Eksekusi Query
     $sql_resep = "SELECT 
                     h.id_request, h.tgl_request, h.status, h.tgl_approve,
                     u_req.nama_lengkap AS nama_pemohon,
@@ -99,7 +86,6 @@ try {
     die("Error mengambil data: " . $e->getMessage());
 }
 
-// 6. Panggil Header & Sidebar
 include '../templates/header.php';
 ?>
 
@@ -209,7 +195,7 @@ include '../templates/header.php';
                                     <td>
                                         <?php
                                         $status = $req['status'];
-                                        $badge_class = 'badge-secondary'; // Default
+                                        $badge_class = 'badge-secondary';
                                         if ($status == 'Pending') $badge_class = 'badge-warning';
                                         if ($status == 'Completed') $badge_class = 'badge-success';
                                         if ($status == 'Cancelled') $badge_class = 'badge-danger';
@@ -239,15 +225,13 @@ include '../templates/header.php';
 
 </div>
 <?php 
-// Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php'; 
 ?>
 
 <script>
 $(document).ready(function() {
-    // ===============================================
-    // 1. INISIALISASI DATATABLES
-    // ===============================================
+
     $('#dataTable').DataTable({
         "order": [[ 0, "desc" ]], 
         "language": {
@@ -265,11 +249,5 @@ $(document).ready(function() {
             "zeroRecords": "Tidak ada data yang cocok"
         }
     });
-
-    // ===============================================
-    // 2. Script CASCADING DROPDOWN sudah DIHAPUS
-    // ===============================================
-    // (Tidak perlu lagi, karena filter poli sudah hilang)
-
 });
 </script>

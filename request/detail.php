@@ -1,29 +1,23 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
+
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
-// Semua role (Super Admin, Admin, Poli Depan, Poli Belakang) boleh "mencoba" melihat
-// tapi logic di bawah akan memvalidasi hak aksesnya.
-
-// 4. Set Judul Halaman
 $page_title = "Detail Request Stok";
 
-// 5. Validasi ID Request dari URL
+
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    // Jika ID tidak ada atau bukan angka, tendang
+
     echo "<script>alert('ID Request tidak valid.'); window.location.href = '" . BASE_URL . "request/kelola.php';</script>";
     exit;
 }
 $id_request = (int)$_GET['id'];
 
-// 6. Logic untuk AMBIL DATA (READ)
+
 try {
-    // 🔹 Query 1: Ambil data Header Request
-    // Kita JOIN ke User (pemohon & approver) dan Unit (tujuan)
+    
     $sql_header = "SELECT 
                         h.id_request, h.tgl_request, h.status, h.keterangan_request,
                         h.tgl_approve, h.id_user_request,
@@ -45,23 +39,19 @@ try {
     $stmt_header->execute([$id_request]);
     $request_header = $stmt_header->fetch();
 
-    // Jika request tidak ditemukan
+
     if (!$request_header) {
         throw new Exception("Data request dengan ID $id_request tidak ditemukan.");
     }
 
-    // 7. (SATPAM 3: HAK AKSES DATA)
-    // Cek apakah user ini berhak melihat request ini?
     $is_admin = ($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2);
     $is_pemohon = ($_SESSION['user_id'] == $request_header['id_user_request']);
 
     if (!$is_admin && !$is_pemohon) {
-        // Jika dia BUKAN Admin DAN BUKAN si pemohon, tendang!
         echo "<script>alert('Akses Ditolak! Anda tidak berhak melihat request ini.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
         exit;
     }
 
-    // 🔹 Query 2: Ambil data Detail (item obat) Request
     $sql_detail = "SELECT 
                         d.jumlah_request,
                         o.kode_obat,
@@ -81,19 +71,15 @@ try {
     $request_details = $stmt_detail->fetchAll();
 
 } catch (PDOException $e) {
-    // =======================================================
-    // INI ADALAH BARIS YANG DIPERBAIKI (LINE 83-84)
-    // =======================================================
+
     die("Error mengambil data: " . $e->getMessage()); 
 } catch (Exception $e) {
-    // Tangkap error kustom (cth: data tidak ditemukan)
+
     die($e->getMessage() . " <a href='" . BASE_URL . "request/kelola.php'>Kembali ke Daftar Request</a>");
 }
 
-// 8. Panggil Header & Sidebar
 include '../templates/header.php';
-// Pastikan sidebar.php dipanggil (jika terpisah)
-// include '../templates/sidebar.php'; 
+
 ?>
 
 <div class="container-fluid">
@@ -140,9 +126,9 @@ include '../templates/header.php';
                             <strong class="text-dark">Status Request:</strong>
                             <p>
                                 <?php
-                                // Pakai Bootstrap Badge untuk status
+                                
                                 $status = $request_header['status'];
-                                $badge_class = 'badge-secondary'; // Default
+                                $badge_class = 'badge-secondary'; 
                                 if ($status == 'Pending') $badge_class = 'badge-warning';
                                 if ($status == 'Completed') $badge_class = 'badge-success';
                                 if ($status == 'Cancelled') $badge_class = 'badge-danger';
@@ -215,6 +201,6 @@ include '../templates/header.php';
         </div>
     </div> </div>
 <?php 
-// Panggil "Kaki" (Template Footer)
+
 include '../templates/footer.php'; 
 ?>

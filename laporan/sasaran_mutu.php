@@ -1,35 +1,23 @@
 <?php
-// 1. Panggil "jantung" config.php
+
 require_once '../config.php';
 
-// 2. Panggil "satpam" auth_check.php
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
-// Hanya SUPER ADMIN (Role ID 1) dan ADMIN (Role ID 2) yang boleh
 if ($_SESSION['role_id'] != 1 && $_SESSION['role_id'] != 2) {
     echo "<script>alert('Akses Ditolak! Anda bukan Super Admin atau Admin.'); window.location.href = '" . BASE_URL . "dashboard.php';</script>";
     exit;
 }
 
-// 4. Set Judul Halaman
 $page_title = "Laporan Rekap Sasaran Mutu";
 
-// 5. [PERBAIKAN] Logic untuk AMBIL DATA (READ) + FILTER
-$laporan_sm = []; // Array untuk menampung hasil
-$filter_bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m'); // Default ke bulan ini
+$laporan_sm = []; 
+$filter_bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m'); 
 
 try {
-    // [B] JIKA user sudah memfilter, jalankan query laporan
-    if (isset($_GET['bulan'])) { // Hanya jalankan jika user menekan tombol "Tampilkan"
-        
-        // --- Query Utama: Mengambil rekap sasaran mutu harian ---
-        // Ini menggantikan sheet 'SM'
-        
-        // [PERBAIKAN] Subquery (SELECT COUNT...) bisa sangat lambat.
-        // Kita akan ambil data Racikan/Non-Racikan secara terpisah.
-        
-        // Query 1: Data dari Header (Lengkap, Kesalahan, Formularium)
+
+    if (isset($_GET['bulan'])) { 
+
         $sql_header = "SELECT 
                             DATE(rh.tgl_resep) AS tanggal,
                             COUNT(rh.id_resep) AS total_resep,
@@ -50,9 +38,8 @@ try {
         
         $stmt_header = $pdo->prepare($sql_header);
         $stmt_header->execute([$filter_bulan]);
-        $data_header = $stmt_header->fetchAll(PDO::FETCH_ASSOC); // Ambil sebagai array asosiatif
+        $data_header = $stmt_header->fetchAll(PDO::FETCH_ASSOC); 
 
-        // Query 2: Data dari Detail (Racikan/Non-Racikan)
         $sql_detail = "SELECT
                             DATE(rh.tgl_resep) AS tanggal,
                             SUM(CASE WHEN rd.jenis_racikan = 'Racikan' THEN 1 ELSE 0 END) AS total_racikan,
@@ -70,16 +57,13 @@ try {
         $stmt_detail->execute([$filter_bulan]);
         $data_detail_raw = $stmt_detail->fetchAll(PDO::FETCH_ASSOC);
         
-        // Ubah data detail menjadi array pivot [tanggal] => [...]
         $data_detail_pivot = [];
         foreach ($data_detail_raw as $data) {
             $data_detail_pivot[$data['tanggal']] = $data;
         }
 
-        // [LOGIKA PENGGABUNGAN] Gabungkan data header dan data detail
         foreach ($data_header as $data_h) {
             $tanggal = $data_h['tanggal'];
-            // [PERBAIKAN] Ganti '??' dengan 'isset()'
             $data_racikan = isset($data_detail_pivot[$tanggal]) ? $data_detail_pivot[$tanggal] : ['total_racikan' => 0, 'total_non_racikan' => 0];
             
             $laporan_sm[] = array_merge($data_h, $data_racikan);
@@ -90,11 +74,9 @@ try {
     die("Error mengambil data: " . $e->getMessage());
 }
 
-// 6. Panggil Header & Sidebar
 include '../templates/header.php';
 
 
-// Fungsi helper untuk menghitung persentase (%) dengan aman (menghindari / 0)
 function hitungPersen($nilai, $total) {
     if ($total == 0) {
         return 0;
@@ -130,7 +112,7 @@ function hitungPersen($nilai, $total) {
         </div>
     </div>
 
-    <?php if (isset($_GET['bulan'])): // Tampilkan hanya jika sudah difilter ?>
+    <?php if (isset($_GET['bulan'])):  ?>
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">
@@ -179,7 +161,7 @@ function hitungPersen($nilai, $total) {
                         
                         <?php 
                         $nomor = 1;
-                        // Inisialisasi Grand Total
+           
                         $gt_lengkap = 0; $gt_tidak_lengkap = 0;
                         $gt_ada_salah = 0; $gt_tidak_salah = 0;
                         $gt_sesuai = 0; $gt_tidak_sesuai = 0;
@@ -194,7 +176,7 @@ function hitungPersen($nilai, $total) {
                         <?php else: ?>
                             <?php foreach ($laporan_sm as $data): ?>
                                 <?php
-                                // Hitung total & persentase
+                            
                                 $total_resep_hari = $data['total_resep'];
                                 $total_item_hari = $data['total_racikan'] + $data['total_non_racikan'];
                                 
@@ -202,8 +184,7 @@ function hitungPersen($nilai, $total) {
                                 $persen_tidak_salah = hitungPersen($data['total_tidak_ada_kesalahan'], $total_resep_hari);
                                 $persen_sesuai = hitungPersen($data['total_sesuai'], $total_resep_hari);
                                 $persen_non_racikan = hitungPersen($data['total_non_racikan'], $total_item_hari);
-                                
-                                // Akumulasi Grand Total
+               
                                 $gt_lengkap += $data['total_lengkap']; $gt_tidak_lengkap += $data['total_tidak_lengkap'];
                                 $gt_ada_salah += $data['total_ada_kesalahan']; $gt_tidak_salah += $data['total_tidak_ada_kesalahan'];
                                 $gt_sesuai += $data['total_sesuai']; $gt_tidak_sesuai += $data['total_tidak_sesuai'];
@@ -261,10 +242,9 @@ function hitungPersen($nilai, $total) {
             </div>
         </div>
     </div>
-    <?php endif; // Selesai blok "jika sudah difilter" ?>
+    <?php endif;  ?>
 
 </main>
 <?php 
-// Panggil "Kaki" (Template Footer)
 include '../templates/footer.php'; 
 ?>
