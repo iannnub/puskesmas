@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <!-- Primary Meta Tags -->
+    <title>SIVO Puskesmas Wuluhan - Sistem Inventori Obat Terpadu</title>
+    <meta name="title" content="SIVO Puskesmas Wuluhan - Sistem Inventori Obat Terpadu">
+    <meta name="description" content="Sistem Informasi Inventori Obat (SIVO) Terpadu Puskesmas Wuluhan. Kelola stok obat, riwayat penggunaan, dan permintaan dari unit dengan mudah dan real-time.">
+    <meta name="keywords" content="sivo, puskesmas wuluhan, inventori obat, aplikasi apotek puskesmas, manajemen stok obat">
+    <meta name="author" content="Puskesmas Wuluhan">
+    
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sivo-wuluhan.page.gd/">
+    <meta property="og:title" content="SIVO Puskesmas Wuluhan - Sistem Inventori Obat Terpadu">
+    <meta property="og:description" content="Sistem Informasi Inventori Obat (SIVO) Terpadu Puskesmas Wuluhan. Kelola stok obat, riwayat penggunaan, dan permintaan dari unit dengan mudah dan real-time.">
+    <!-- Pastikan ganti URL gambar ini dengan URL proyek Vercel Anda setelah deploy, misalnya: https://domain-vercel-anda.vercel.app/og-image.png -->
+    <meta property="og:image" content="https://sivo-wuluhan.page.gd/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://sivo-wuluhan.page.gd/">
+    <meta property="twitter:title" content="SIVO Puskesmas Wuluhan - Sistem Inventori Obat Terpadu">
+    <meta property="twitter:description" content="Sistem Informasi Inventori Obat (SIVO) Terpadu Puskesmas Wuluhan. Kelola stok obat, riwayat penggunaan, dan permintaan dari unit dengan mudah dan real-time.">
+    <meta property="twitter:image" content="https://sivo-wuluhan.page.gd/og-image.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #0ea5e9;
+            --secondary-color: #10b981;
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.3) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.2) 0px, transparent 50%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 4rem 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .logo-container {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
+            transform: rotate(-10deg);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .logo-container:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .logo-container svg {
+            width: 60px;
+            height: 60px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #38bdf8, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #94a3b8;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-inline: auto;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), #0284c7);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2.5rem;
+            border-radius: 99px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(14, 165, 233, 0.5);
+            background: linear-gradient(135deg, #38bdf8, var(--primary-color));
+        }
+
+        .bg-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            filter: blur(60px);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: pulse 10s alternate infinite;
+        }
+
+        .shape-1 {
+            background: var(--primary-color);
+            width: 300px;
+            height: 300px;
+            top: -10%;
+            left: -10%;
+        }
+
+        .shape-2 {
+            background: var(--secondary-color);
+            width: 400px;
+            height: 400px;
+            bottom: -20%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .glass-card { padding: 3rem 1.5rem; }
+            p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Decoration -->
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="glass-card">
+            
+            <div class="logo-container">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+            </div>
+
+            <h1>SIVO Puskesmas</h1>
+            <p>Sistem Informasi Inventori Obat Terpadu. Kelola stok obat, pantau riwayat distribusi, dan tangani permintaan antar unit puskesmas dengan cepat dan akurat.</p>
+            
+            <!-- Redirect ke Domain Utama (InfinityFree) -->
+            <a href="https://sivo-wuluhan.page.gd/auth/login.php" class="btn">
+                Masuk ke Aplikasi
+            </a>
+            
+        </div>
+    </div>
+</body>
+</html>
