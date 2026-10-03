@@ -51,8 +51,13 @@ try {
             exit;
 
         case 'delete':
+            // Verifikasi CSRF Token (BUG-SIVO-009)
+            $token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? '';
+            if (!verify_csrf($token)) {
+                throw new Exception("Token keamanan tidak valid atau telah kedaluwarsa. Silakan refresh halaman.");
+            }
 
-            $id_unit_hapus = (int)$_GET['id'];
+            $id_unit_hapus = (int)($_POST['id'] ?? $_GET['id'] ?? 0);
             
             if (empty($id_unit_hapus)) {
                  throw new Exception("ID Unit tidak valid.");

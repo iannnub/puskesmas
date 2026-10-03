@@ -13,7 +13,14 @@ if (!in_array((int)$_SESSION['role_id'], [1, 2, 4, 5], true)) {
     exit;
 }
 
-$id_resep = (int)($_GET['id'] ?? 0);
+// Verifikasi CSRF Token (BUG-SIVO-009)
+$token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? '';
+if (!verify_csrf($token)) {
+    header("Location: " . BASE_URL . "resep/history.php?status=gagal&msg=" . urlencode("Token keamanan tidak valid atau telah kedaluwarsa. Silakan refresh halaman."));
+    exit;
+}
+
+$id_resep = (int)($_POST['id'] ?? $_GET['id'] ?? 0);
 if ($id_resep <= 0) {
     header("Location: " . BASE_URL . "resep/history.php?status=gagal&msg=" . urlencode("ID resep tidak valid."));
     exit;

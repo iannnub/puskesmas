@@ -108,7 +108,7 @@ include '../templates/header.php';
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <!-- Tombol Hapus -->
-                                            <a href="proses_tambah_dokter.php?action=delete&id=<?= $row['id_dokter']; ?>"
+                                            <a href="proses_tambah_dokter.php?action=delete&id=<?= $row['id_dokter']; ?>&csrf_token=<?= csrf_token(); ?>"
                                                onclick="return confirm('Hapus dokter \'<?= htmlspecialchars($row['nama_dokter']); ?>\'?');"
                                                class="btn btn-danger btn-sm">
                                                 <i class="fas fa-trash"></i>

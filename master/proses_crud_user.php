@@ -99,9 +99,14 @@ try {
 
   
         case 'delete':
-         
-            $id_user_hapus = (int)$_GET['id'];
-       
+            // Verifikasi CSRF Token (BUG-SIVO-009)
+            $token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? '';
+            if (!verify_csrf($token)) {
+                throw new Exception("Token keamanan tidak valid atau telah kedaluwarsa. Silakan refresh halaman.");
+            }
+
+            $id_user_hapus = (int)($_POST['id'] ?? $_GET['id'] ?? 0);
+        
             if ($id_user_hapus == $_SESSION['user_id']) {
                 throw new Exception("Anda tidak bisa menghapus akun Anda sendiri.");
             }

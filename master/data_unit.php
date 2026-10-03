@@ -106,7 +106,7 @@ include '../templates/header.php';
                                         <a href="#" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i> Ubah
                                         </a>
-                                        <a href="<?php echo BASE_URL; ?>master/proses_crud_unit.php?action=delete&id=<?php echo $unit['id_unit']; ?>" 
+                                        <a href="<?php echo BASE_URL; ?>master/proses_crud_unit.php?action=delete&id=<?php echo $unit['id_unit']; ?>&csrf_token=<?php echo csrf_token(); ?>" 
                                            class="btn btn-danger btn-sm"
                                            onclick="return confirm('PERINGATAN! Menghapus unit ini sangat berbahaya jika masih terpakai oleh Poli atau data Stok.\n\nLanjutkan menghapus unit (<?php echo htmlspecialchars($unit['nama_unit']); ?>)?');">
                                            <i class="fas fa-trash"></i> Hapus

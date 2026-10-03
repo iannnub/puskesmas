@@ -50,8 +50,13 @@ try {
             exit;
 
         case 'delete':
+            // Verifikasi CSRF Token (BUG-SIVO-009)
+            $token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? '';
+            if (!verify_csrf($token)) {
+                throw new Exception("Token keamanan tidak valid atau telah kedaluwarsa. Silakan refresh halaman.");
+            }
 
-            $id_poli_hapus = (int)$_GET['id'];
+            $id_poli_hapus = (int)($_POST['id'] ?? $_GET['id'] ?? 0);
             
             if (empty($id_poli_hapus)) {
                  throw new Exception("ID Poli tidak valid.");

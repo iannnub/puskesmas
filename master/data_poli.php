@@ -197,7 +197,7 @@ include '../templates/header.php';
                                         <a href="#" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i> Ubah
                                         </a>
-                                        <a href="<?php echo BASE_URL; ?>master/proses_crud_poli.php?action=delete&id=<?php echo $poli['id_poli']; ?>"
+                                        <a href="<?php echo BASE_URL; ?>master/proses_crud_poli.php?action=delete&id=<?php echo $poli['id_poli']; ?>&csrf_token=<?php echo csrf_token(); ?>"
                                            class="btn btn-danger btn-sm"
                                            onclick="return confirm('PERINGATAN! Menghapus poli ini bisa GAGAL jika masih terpakai oleh user atau data resep.\n\nLanjutkan menghapus poli (<?php echo htmlspecialchars($poli['nama_poli']); ?>)?');">
                                             <i class="fas fa-trash"></i> Hapus

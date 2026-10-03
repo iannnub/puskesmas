@@ -47,8 +47,15 @@ if ($action == 'update' && $_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // HAPUS DOKTER
-if ($action == 'delete' && isset($_GET['id'])) {
-    $id_dokter = (int)$_GET['id'];
+if ($action == 'delete') {
+    // Verifikasi CSRF Token (BUG-SIVO-009)
+    $token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? '';
+    if (!verify_csrf($token)) {
+        header("Location: data_obat.php?status_dokter=gagal&msg=" . urlencode('Token keamanan tidak valid atau telah kedaluwarsa.'));
+        exit;
+    }
+
+    $id_dokter = (int)($_POST['id'] ?? $_GET['id'] ?? 0);
     if ($id_dokter > 0) {
         try {
             $stmt = $pdo->prepare("DELETE FROM tbl_dokter WHERE id_dokter = ?");

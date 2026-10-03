@@ -178,7 +178,7 @@ include '../templates/header.php';
                                         <a href="#" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i> Ubah
                                         </a>
-                                        <a href="<?php echo BASE_URL; ?>master/proses_crud_user.php?action=delete&id=<?php echo $user['id_user']; ?>" 
+                                        <a href="<?php echo BASE_URL; ?>master/proses_crud_user.php?action=delete&id=<?php echo $user['id_user']; ?>&csrf_token=<?php echo csrf_token(); ?>" 
                                            class="btn btn-danger btn-sm"
                                            onclick="return confirm('Apakah Anda yakin ingin menghapus user ini? (<?php echo htmlspecialchars($user['username']); ?>)');">
                                            <i class="fas fa-trash"></i> Hapus

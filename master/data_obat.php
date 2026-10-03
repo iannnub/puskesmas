@@ -301,7 +301,7 @@ include '../templates/header.php';
                                                     data-nama="<?= htmlspecialchars($row['nama_dokter']); ?>">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <a href="<?php echo BASE_URL; ?>master/proses_tambah_dokter.php?action=delete&id=<?= $row['id_dokter']; ?>"
+                                            <a href="<?php echo BASE_URL; ?>master/proses_tambah_dokter.php?action=delete&id=<?= $row['id_dokter']; ?>&csrf_token=<?= csrf_token(); ?>"
                                                onclick="return confirm('Hapus dokter \'<?= htmlspecialchars($row['nama_dokter']); ?>\'?');"
                                                class="btn btn-danger btn-sm">
                                                 <i class="fas fa-trash"></i>
@@ -391,7 +391,7 @@ include '../templates/header.php';
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                                 
-                                                <a href="<?php echo BASE_URL; ?>master/proses_crud_obat.php?action=delete&id=<?php echo $obat['id_obat']; ?>" 
+                                                <a href="<?php echo BASE_URL; ?>master/proses_crud_obat.php?action=delete&id=<?php echo $obat['id_obat']; ?>&csrf_token=<?php echo csrf_token(); ?>" 
                                                    onclick="return confirm('PERINGATAN! Menghapus obat ini bisa GAGAL jika sudah terpakai di data transaksi.\n\nLanjutkan menghapus (<?php echo htmlspecialchars($obat['nama_obat']); ?>)?');" 
                                                    class="btn btn-danger btn-sm">
                                                     <i class="fas fa-trash"></i>
