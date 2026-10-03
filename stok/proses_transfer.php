@@ -85,13 +85,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['action'] == 'create') {
 
         $id_referensi_transaksi = $pdo->lastInsertId();
 
+        // Ambil nama unit asal dan tujuan secara presisi (SEC-05 / BUG-SIVO-011)
+        $stmt_unit_names = $pdo->prepare("SELECT id_unit, nama_unit FROM tbl_unit WHERE id_unit IN (?, ?)");
+        $stmt_unit_names->execute([$id_unit_asal, $id_unit_tujuan]);
+        $unit_map = $stmt_unit_names->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        $nama_unit_asal = $unit_map[$id_unit_asal] ?? "Unit #$id_unit_asal";
+        $nama_unit_tujuan = $unit_map[$id_unit_tujuan] ?? "Unit #$id_unit_tujuan";
+
+        $ket_keluar = "Transfer Keluar ke " . $nama_unit_tujuan . ($keterangan ? " ($keterangan)" : "");
+        $ket_masuk  = "Transfer Masuk dari " . $nama_unit_asal . ($keterangan ? " ($keterangan)" : "");
+
         $sql_log_keluar = "INSERT INTO tbl_log_stok 
                              (tgl_log, id_obat, id_unit, sumber_data, stok_sebelum, masuk, keluar, stok_sesudah, keterangan, id_referensi_transaksi) 
                            VALUES (?, ?, ?, 'Transfer', ?, 0, ?, ?, ?, ?)";
         $pdo->prepare($sql_log_keluar)->execute([
             $tgl_transfer, $id_obat, $id_unit_asal, 
             $stok_sebelum_asal, $jumlah, $stok_sesudah_asal, 
-            "Transfer Keluar ke " . $units[$id_unit_tujuan-1]['nama_unit'], 
+            $ket_keluar, 
             $id_referensi_transaksi
         ]);
 
@@ -101,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['action'] == 'create') {
         $pdo->prepare($sql_log_masuk)->execute([
             $tgl_transfer, $id_obat, $id_unit_tujuan, 
             $stok_sebelum_tujuan, $jumlah, $stok_sesudah_tujuan, 
-            "Transfer Masuk dari " . $units[$id_unit_asal-1]['nama_unit'], 
+            $ket_masuk, 
             $id_referensi_transaksi
         ]);
 

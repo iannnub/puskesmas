@@ -40,9 +40,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['action'] == 'create') {
         $id_referensi_transaksi = $pdo->lastInsertId();
 
         
+        // Kunci baris inventori dengan FOR UPDATE untuk mencegah race condition (SEC-04 / BUG-SIVO-010)
         $sql_cek_stok = "SELECT id_stok, stok_akhir 
                          FROM tbl_stok_inventori 
-                         WHERE id_obat = ? AND id_unit = ?";
+                         WHERE id_obat = ? AND id_unit = ? FOR UPDATE";
         $stmt_cek_stok = $pdo->prepare($sql_cek_stok);
         $stmt_cek_stok->execute([$id_obat, $id_unit]);
         $stok_saat_ini = $stmt_cek_stok->fetch();
