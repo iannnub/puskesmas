@@ -7,8 +7,8 @@
 require_once '../config.php';
 require_once '../templates/auth_check.php';
 
-// Super Admin (1), Dokter/Poli (2), dan Poli Belakang / Rawat Inap (4) berhak membatalkan
-if (!in_array((int)$_SESSION['role_id'], [1, 2, 4], true)) {
+// Super Admin (1), Dokter/Poli (2), Poli Belakang (4), dan Apotek (5) berhak membatalkan
+if (!in_array((int)$_SESSION['role_id'], [1, 2, 4, 5], true)) {
     header("Location: " . BASE_URL . "resep/history.php?status=gagal&msg=" . urlencode("Akses ditolak: Anda tidak memiliki wewenang membatalkan resep."));
     exit;
 }

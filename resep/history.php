@@ -2,9 +2,10 @@
 require_once '../config.php';
 require_once '../templates/auth_check.php';
 
-// Hanya Poli Belakang (role 4) dan Admin (role 2) yang boleh akses
-if ($_SESSION['role_id'] != 4 && $_SESSION['role_id'] != 2) {
-    $_SESSION['flash_error'] = 'Akses Ditolak!'; header("Location: " . BASE_URL . "dashboard.php"); exit;
+// Hak Akses: Super Admin (1), Dokter/Poli Umum (2), Poli Belakang (4), Apotek (5)
+if (!in_array((int)$_SESSION['role_id'], [1, 2, 4, 5], true)) {
+    $_SESSION['flash_error'] = 'Akses Ditolak! Anda tidak memiliki izin melihat riwayat peresepan.';
+    header("Location: " . BASE_URL . "dashboard.php");
     exit;
 }
 

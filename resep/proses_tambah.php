@@ -2,8 +2,8 @@
 require_once '../config.php';
 require_once '../templates/auth_check.php';
 
-// Cek Hak Akses
-if ($_SESSION['role_id'] != 2 && $_SESSION['role_id'] != 4) {
+// Cek Hak Akses (Role 1 Super Admin, 2 Poli Umum, 4 Poli Belakang, 5 Apotek)
+if (!in_array((int)$_SESSION['role_id'], [1, 2, 4, 5], true)) {
     header("Location: " . BASE_URL . "resep/tambah.php?status=gagal_akses");
     exit;
 }

@@ -5,9 +5,10 @@ require_once '../config.php';
 // 2. Panggil "satpam" auth_check.php
 require_once '../templates/auth_check.php';
 
-// 3. (SATPAM 2: ROLE CHECK)
-if ($_SESSION['role_id'] != 2 && $_SESSION['role_id'] != 4) {
-    $_SESSION['flash_error'] = 'Akses Ditolak! Anda tidak punya hak akses untuk input resep.'; header("Location: " . BASE_URL . "dashboard.php"); exit;
+// 3. (SATPAM 2: ROLE CHECK - Role 1 Superadmin, 2 Poli Umum, 4 Poli Belakang, 5 Apotek)
+if (!in_array((int)$_SESSION['role_id'], [1, 2, 4, 5], true)) {
+    $_SESSION['flash_error'] = 'Akses Ditolak! Anda tidak punya hak akses untuk input resep.';
+    header("Location: " . BASE_URL . "dashboard.php");
     exit;
 }
 
@@ -43,13 +44,13 @@ include '../templates/header.php';
 
     <h1 class="h3 mb-4 text-gray-800"><?php echo htmlspecialchars($page_title); ?></h1>
     
-    <?php if ($_SESSION['role_id'] == 2): ?>
+    <?php if ((int)$_SESSION['role_id'] === 4): ?>
         <div class="alert alert-info shadow" role="alert">
-            <i class="fas fa-user-tie"></i> Anda login sebagai <strong>Admin</strong>. Form ini digunakan untuk menginput resep kertas dari <strong>Poli Depan</strong>.
+            <i class="fas fa-stethoscope"></i> Anda login sebagai <strong>Poli Belakang</strong> (Unit: <?php echo htmlspecialchars($_SESSION['role_nama'] ?? 'Unit Sendiri'); ?>). Form ini akan otomatis memotong stok unit Anda.
         </div>
     <?php else: ?>
         <div class="alert alert-info shadow" role="alert">
-            <i class="fas fa-user-md"></i> Anda login sebagai <strong><?php echo htmlspecialchars($_SESSION['nama_lengkap']); ?></strong>. Gunakan form ini untuk mencatat pemakaian obat di unit Anda.
+            <i class="fas fa-user-md"></i> Anda login sebagai <strong><?php echo htmlspecialchars($_SESSION['role_nama'] ?? 'Petugas'); ?></strong> (<?php echo htmlspecialchars($_SESSION['nama_lengkap'] ?? ''); ?>). Form ini digunakan untuk mencatat peresepan obat pasien.
         </div>
     <?php endif; ?>
     
@@ -62,11 +63,11 @@ include '../templates/header.php';
             <?php if (isset($_GET['status'])): ?>
                 <?php if ($_GET['status'] == 'tambah_sukses'): ?>
                     <div class="alert alert-success" role="alert">
-                        Resep berhasil disimpan! Stok telah diupdate.
+                        Resep disimpan. Stok unit pelayanan diperbarui.
                     </div>
                 <?php elseif ($_GET['status'] == 'gagal'): ?>
                     <div class="alert alert-danger" role="alert">
-                        <strong>Operasi Gagal!</strong> <?php echo isset($_GET['msg']) ? htmlspecialchars(urldecode($_GET['msg'])) : 'Silakan coba lagi.'; ?>
+                        <strong>Gagal menyimpan resep:</strong> <?php echo isset($_GET['msg']) ? htmlspecialchars(urldecode($_GET['msg'])) : 'Periksa kembali ketersediaan stok obat dan data pasien.'; ?>
                     </div>
                 <?php endif; ?>
             <?php endif; ?>

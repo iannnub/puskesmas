@@ -69,6 +69,20 @@ $current_page = $_SERVER['REQUEST_URI'];
             </a>
         </li>
 
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">Pelayanan Resep</div>
+
+        <li class="nav-item <?php echo (strpos($current_page, 'resep/tambah.php') !== false) ? 'active' : ''; ?>">
+            <a class="nav-link" href="<?php echo BASE_URL; ?>resep/tambah.php">
+                <i class="fas fa-fw fa-file-medical-alt"></i> <span>Input Resep</span>
+            </a>
+        </li>
+        <li class="nav-item <?php echo (strpos($current_page, 'resep/history.php') !== false || strpos($current_page, 'resep/edit.php') !== false) ? 'active' : ''; ?>">
+            <a class="nav-link" href="<?php echo BASE_URL; ?>resep/history.php">
+                <i class="fas fa-fw fa-clipboard-list"></i> <span>History Pemakaian Obat</span>
+            </a>
+        </li>
+
     <?php
     // ==========================================================
     // ADMIN OPERATOR (Role 2)
@@ -99,19 +113,19 @@ $current_page = $_SERVER['REQUEST_URI'];
             </a>
         </li>
 
-        <!-- <hr class="sidebar-divider">
-        <div class="sidebar-heading">Pemakaian Obat</div>
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">Pelayanan Resep</div>
 
         <li class="nav-item <?php echo (strpos($current_page, 'resep/tambah.php') !== false) ? 'active' : ''; ?>">
             <a class="nav-link" href="<?php echo BASE_URL; ?>resep/tambah.php">
-                <i class="fas fa-fw fa-file-medical-alt"></i> <span>Input Resep (Poli Depan)</span>
+                <i class="fas fa-fw fa-file-medical-alt"></i> <span>Input Resep</span>
             </a>
         </li>
         <li class="nav-item <?php echo (strpos($current_page, 'resep/history.php') !== false || strpos($current_page, 'resep/edit.php') !== false) ? 'active' : ''; ?>">
             <a class="nav-link" href="<?php echo BASE_URL; ?>resep/history.php">
-                <i class="fas fa-fw fa-clipboard-list"></i> <span>History Pemakaian</span>
+                <i class="fas fa-fw fa-clipboard-list"></i> <span>History Pemakaian Obat</span>
             </a>
-        </li> -->
+        </li>
 
         <hr class="sidebar-divider">
         <div class="sidebar-heading">Request Stok</div>
@@ -216,6 +230,20 @@ $current_page = $_SERVER['REQUEST_URI'];
         <li class="nav-item <?php echo (strpos($current_page, 'stok/opname.php') !== false) ? 'active' : ''; ?>">
             <a class="nav-link" href="<?php echo BASE_URL; ?>stok/opname.php">
                 <i class="fas fa-fw fa-boxes"></i> <span>Stok Opname</span>
+            </a>
+        </li>
+
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">Pelayanan Resep</div>
+
+        <li class="nav-item <?php echo (strpos($current_page, 'resep/tambah.php') !== false) ? 'active' : ''; ?>">
+            <a class="nav-link" href="<?php echo BASE_URL; ?>resep/tambah.php">
+                <i class="fas fa-fw fa-file-medical-alt"></i> <span>Input Resep</span>
+            </a>
+        </li>
+        <li class="nav-item <?php echo (strpos($current_page, 'resep/history.php') !== false || strpos($current_page, 'resep/edit.php') !== false) ? 'active' : ''; ?>">
+            <a class="nav-link" href="<?php echo BASE_URL; ?>resep/history.php">
+                <i class="fas fa-fw fa-clipboard-list"></i> <span>History Pemakaian Obat</span>
             </a>
         </li>
 
