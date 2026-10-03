@@ -4,15 +4,16 @@ require_once '../config.php';
 require_once '../templates/auth_check.php';
 
 
-$id_role_user  = $_SESSION['id_role']  ?? 5;
-$id_unit_login = $_SESSION['id_unit']  ?? 5; // ID unit milik user Poli Belakang
+$id_role_user  = (int)($_SESSION['role_id'] ?? 0);
+$id_unit_login = (int)($_SESSION['unit_stok_id'] ?? 0); // ID unit milik user Poli Belakang
 
-$is_admin        = in_array($id_role_user, [1,2,5]);
-$is_poli_belakang = in_array($id_role_user, [4]);
+$is_admin         = in_array($id_role_user, [1, 5], true); // Super Admin (1) & Apotek (5)
+$is_poli_belakang = in_array($id_role_user, [4], true);    // Poli Belakang / Rawat Inap (4)
 
-// Hanya Admin dan Poli Belakang yang boleh akses
+// Hanya Admin/Apotek dan Poli Belakang yang boleh akses
 if (!$is_admin && !$is_poli_belakang) {
-    $_SESSION['flash_error'] = 'Akses Ditolak! Halaman ini hanya untuk Poli Belakang.'; header("Location: " . BASE_URL . "dashboard.php"); exit;
+    $_SESSION['flash_error'] = 'Akses Ditolak! Halaman ini hanya untuk Petugas Farmasi dan Poli Belakang.';
+    header("Location: " . BASE_URL . "dashboard.php");
     exit;
 }
 

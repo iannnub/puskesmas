@@ -48,15 +48,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             session_regenerate_id(true);
 
-            $_SESSION['user_id'] = $user['id_user'];
+            $_SESSION['user_id'] = (int)$user['id_user'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['nama_lengkap'] = $user['nama_lengkap'];
-            $_SESSION['role_id'] = $user['id_role'];       
+            $_SESSION['role_id'] = (int)$user['id_role'];       
             $_SESSION['role_nama'] = $user['nama_role'];   
-            
-           
             $_SESSION['poli_id'] = $user['id_poli'];      
-            $_SESSION['unit_stok_id'] = $user['id_unit_stok_default']; 
+            $_SESSION['unit_stok_id'] = (int)$user['id_unit_stok_default']; 
+
+            // Kompatibilitas ganda (alias standar)
+            $_SESSION['id_role'] = (int)$user['id_role'];
+            $_SESSION['id_unit'] = (int)$user['id_unit_stok_default']; 
 
             
             header("Location: " . BASE_URL . "dashboard.php");
