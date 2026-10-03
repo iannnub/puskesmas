@@ -1,0 +1,30 @@
+# SIVO Puskesmas - access hardening (SEC-01)
+#
+# Why this file exists:
+#   Before this rule set, Apache served .env (DB credentials), dbpuskesmas.sql
+#   (full dump incl. password hashes), .git/ (full source history), *.bak
+#   source copies, internal *.md reports, and tests/*.php (scripts that write
+#   to the database) to anyone on the network.
+#
+# Why it is safe:
+#   Only non-application files are denied. Every .php page, assets (css/js/img),
+#   and index.html remain reachable. Rules use Apache 2.4 "Require" syntax.
+
+Options -Indexes
+
+# 1. Dotfiles and dot-directories (.env, .env.example, .git, .gitignore, .htaccess)
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# 2. Database dumps, backups, docs, logs, config templates
+<FilesMatch "\.(sql|bak|md|log|ini|sh|bat|ps1|dist|example|lock)$">
+    Require all denied
+</FilesMatch>
+
+# 3. Whole directories that must never be web-reachable
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule (^|/)\.git(/|$) - [F,L]
+    RewriteRule ^(tests|migrations)(/|$) - [F,L]
+</IfModule>
