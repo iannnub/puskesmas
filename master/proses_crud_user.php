@@ -106,8 +106,16 @@ try {
                 throw new Exception("Anda tidak bisa menghapus akun Anda sendiri.");
             }
          
-            if ($id_user_hapus == 1) { 
-                 throw new Exception("Akun root Super Admin tidak boleh dihapus.");
+            // Cek role user target (Cegah penghapusan akun Super Admin - SEC-03 / BUG-SIVO-013)
+            $stmt_check_user = $pdo->prepare("SELECT id_role, username FROM tbl_user WHERE id_user = ?");
+            $stmt_check_user->execute([$id_user_hapus]);
+            $target_user = $stmt_check_user->fetch();
+
+            if (!$target_user) {
+                throw new Exception("User tidak ditemukan.");
+            }
+            if ((int)$target_user['id_role'] === 1 || strtolower($target_user['username']) === 'superadmin') { 
+                throw new Exception("Akun dengan wewenang Super Admin tidak dapat dihapus.");
             }
 
             $sql = "DELETE FROM tbl_user WHERE id_user = ?";
@@ -123,8 +131,8 @@ try {
 
 } catch (Exception $e) {
 
-    echo "Error: " . $e->getMessage();
-    echo "<br><a href='" . BASE_URL . "master/data_user.php'>Kembali ke Data User</a>";
+    header("Location: " . BASE_URL . "master/data_user.php?status=gagal&msg=" . urlencode($e->getMessage()));
+    exit;
 
 }
 ?>
