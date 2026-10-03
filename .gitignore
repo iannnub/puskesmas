@@ -29,6 +29,8 @@ nbproject/
 # Database Dumps (PENTING!)
 # ===========================
 *.sql
+!dbpuskesmas.sql
+!migrations/*.sql
 *.sql.gz
 *.sql.bak
 *.dump

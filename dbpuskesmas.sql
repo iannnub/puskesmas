@@ -1395,7 +1395,8 @@ CREATE TABLE `tbl_request_detail` (
   `id_request_detail` bigint(20) NOT NULL,
   `id_request` bigint(20) NOT NULL,
   `id_obat` int(11) NOT NULL,
-  `jumlah_request` int(11) NOT NULL
+  `jumlah_request` int(11) NOT NULL,
+  `jumlah_terpenuhi` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1423,7 +1424,8 @@ CREATE TABLE `tbl_request_header` (
   `tgl_request` datetime NOT NULL,
   `id_user_request` int(11) NOT NULL COMMENT 'User Poli Belakang yg request',
   `id_unit_tujuan` int(11) NOT NULL COMMENT 'Unit yg minta (cth: UGD)',
-  `status` enum('Pending','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
+  `tipe_request` enum('Poli_ke_Apotek','Apotek_ke_Gudang') NOT NULL DEFAULT 'Poli_ke_Apotek',
+  `status` enum('Pending','Partial','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
   `keterangan_request` varchar(255) DEFAULT NULL,
   `id_user_approve` int(11) DEFAULT NULL COMMENT 'Admin yg memproses',
   `tgl_approve` datetime DEFAULT NULL
@@ -1526,7 +1528,8 @@ CREATE TABLE `tbl_stok_inventori` (
   `id_unit` int(11) NOT NULL,
   `stok_akhir` int(11) NOT NULL DEFAULT 0,
   `stok_minimum` int(11) NOT NULL DEFAULT 10 COMMENT 'Batas min PER UNIT (Gudang/Apotek/UGD).',
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Tahu kapan stok terakhir di-update. Full otomatis.'
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Tahu kapan stok terakhir di-update. Full otomatis.',
+  CONSTRAINT `chk_stok_nonneg` CHECK (`stok_akhir` >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
