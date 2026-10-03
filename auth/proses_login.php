@@ -6,8 +6,8 @@ require_once '../config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
    
-    $username = htmlspecialchars($_POST['username']);
-    $password_dari_form = htmlspecialchars($_POST['password']);
+    $username = trim($_POST['username'] ?? '');
+    $password_dari_form = trim($_POST['password'] ?? '');
 
     
     if (empty($username) || empty($password_dari_form)) {
