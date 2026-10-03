@@ -26,16 +26,20 @@ try {
     $stmt_habis = $pdo->query("SELECT COUNT(id_stok) FROM tbl_stok_inventori WHERE stok_akhir = 0");
     $total_habis = $stmt_habis->fetchColumn();
 
-    // Hitung request partial sesuai role
+    // Hitung request partial sesuai role (Parameter Binding Prepared Statement - SEC-02)
     $sql_count_partial = "SELECT COUNT(*) FROM tbl_request_header h WHERE h.status = 'Partial'";
+    $params_partial = [];
     if ($_SESSION['role_id'] == 4) {
-        $sql_count_partial .= " AND h.id_user_request = {$_SESSION['user_id']} AND h.tipe_request = 'Poli_ke_Apotek'";
+        $sql_count_partial .= " AND h.id_user_request = ? AND h.tipe_request = 'Poli_ke_Apotek'";
+        $params_partial[] = (int)$_SESSION['user_id'];
     } elseif ($_SESSION['role_id'] == 5) {
         $sql_count_partial .= " AND h.tipe_request = 'Poli_ke_Apotek'";
     } else {
         $sql_count_partial .= " AND h.tipe_request = 'Apotek_ke_Gudang'";
     }
-    $partial_count = $pdo->query($sql_count_partial)->fetchColumn();
+    $stmt_partial = $pdo->prepare($sql_count_partial);
+    $stmt_partial->execute($params_partial);
+    $partial_count = (int)$stmt_partial->fetchColumn();
 
 } catch (PDOException $e) {
 
