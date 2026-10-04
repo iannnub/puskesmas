@@ -18,7 +18,8 @@ try {
     $all_obats = $stmt_obat->fetchAll();
 
 } catch (PDOException $e) {
-    die("Error mengambil data: " . $e->getMessage());
+    error_log("[SIVO REQUEST BUAT ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat form permohonan obat. Silakan hubungi administrator.");
 }
 
 include '../templates/header.php';

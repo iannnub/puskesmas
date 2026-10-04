@@ -21,7 +21,8 @@ try {
     $stmt_obat = $pdo->query("SELECT id_obat, kode_obat, nama_obat, satuan FROM tbl_obat ORDER BY id_obat ASC");
     $all_obats = $stmt_obat->fetchAll();
 } catch (PDOException $e) {
-    die("Error mengambil data: " . $e->getMessage());
+    error_log("[SIVO REQUEST APOTEK ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat form permohonan obat apotek. Silakan hubungi administrator.");
 }
 
 include '../templates/header.php';

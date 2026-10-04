@@ -74,9 +74,10 @@ try {
     $request_details = $stmt_detail->fetchAll();
 
 } catch (PDOException $e) {
-    die("Error mengambil data: " . $e->getMessage());
+    error_log("[SIVO REQUEST DETAIL ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat rincian permintaan obat. Silakan hubungi administrator.");
 } catch (Exception $e) {
-    die($e->getMessage() . " <a href='" . BASE_URL . "request/kelola.php'>Kembali ke Daftar Request</a>");
+    die(htmlspecialchars($e->getMessage()) . " <a href='" . BASE_URL . "request/kelola.php'>Kembali ke Daftar Request</a>");
 }
 
 include '../templates/header.php';

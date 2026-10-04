@@ -99,7 +99,8 @@ try {
     $riwayat_requests = $stmt_resep->fetchAll();
 
 } catch (PDOException $e) {
-    die("Error mengambil data: " . $e->getMessage());
+    error_log("[SIVO REQUEST RIWAYAT ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat riwayat permintaan obat. Silakan hubungi administrator.");
 }
 
 include '../templates/header.php';

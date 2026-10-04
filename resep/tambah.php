@@ -34,7 +34,8 @@ try {
     $all_obats = $stmt_obat_all->fetchAll();
 
 } catch (PDOException $e) {
-    die("Error mengambil data: " . $e->getMessage());
+    error_log("[SIVO RESEP TAMBAH ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat formulir resep. Silakan hubungi administrator.");
 }
 
 include '../templates/header.php';

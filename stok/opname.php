@@ -47,7 +47,8 @@ try {
     $riwayat_opname = $stmt_riwayat->fetchAll();
 
 } catch (PDOException $e) {
-    die("Error mengambil data: " . $e->getMessage());
+    error_log("[SIVO STOK OPNAME ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat modul stok opname. Silakan hubungi administrator.");
 }
 
 include '../templates/header.php';

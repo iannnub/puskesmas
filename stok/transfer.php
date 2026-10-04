@@ -46,7 +46,8 @@ try {
     $riwayat_transfer = $stmt_riwayat->fetchAll();
 
 } catch (PDOException $e) {
-    die("Error mengambil data: " . $e->getMessage());
+    error_log("[SIVO STOK TRANSFER ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat formulir transfer stok. Silakan hubungi administrator.");
 }
 
 
@@ -71,11 +72,11 @@ include '../templates/header.php';
                     <?php if (isset($_GET['status'])): ?>
                         <?php if ($_GET['status'] == 'tambah_sukses'): ?>
                             <div class="alert alert-success" role="alert">
-                                Transfer stok berhasil dicatat! Stok di kedua unit telah diupdate.
+                                Transfer stok selesai. Saldo inventori kedua unit diperbarui.
                             </div>
                         <?php elseif ($_GET['status'] == 'gagal'): ?>
                             <div class="alert alert-danger" role="alert">
-                                <strong>Operasi Gagal!</strong> <?php echo isset($_GET['msg']) ? htmlspecialchars(urldecode($_GET['msg'])) : 'Silakan coba lagi.'; ?>
+                                <strong>Gagal memproses transfer:</strong> <?php echo isset($_GET['msg']) ? htmlspecialchars(urldecode($_GET['msg'])) : 'Periksa kembali kuantitas dan data transfer.'; ?>
                             </div>
                         <?php endif; ?>
                     <?php endif; ?>

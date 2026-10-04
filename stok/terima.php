@@ -40,7 +40,8 @@ try {
     $riwayat_penerimaan = $stmt_riwayat->fetchAll();
 
 } catch (PDOException $e) {
-    die("Error mengambil data: " . $e->getMessage());
+    error_log("[SIVO STOK TERIMA ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat modul penerimaan obat. Silakan hubungi administrator.");
 }
 
 
@@ -65,11 +66,11 @@ include '../templates/header.php';
                     <?php if (isset($_GET['status'])): ?>
                         <?php if ($_GET['status'] == 'tambah_sukses'): ?>
                             <div class="alert alert-success" role="alert">
-                                Penerimaan stok berhasil dicatat! Stok telah diupdate.
+                                Penerimaan obat selesai. Saldo inventori gudang bertambah.
                             </div>
                         <?php elseif ($_GET['status'] == 'gagal'): ?>
                             <div class="alert alert-danger" role="alert">
-                                <strong>Operasi Gagal!</strong> <?php echo isset($_GET['msg']) ? htmlspecialchars(urldecode($_GET['msg'])) : 'Silakan coba lagi.'; ?>
+                                <strong>Gagal mencatat penerimaan:</strong> <?php echo isset($_GET['msg']) ? htmlspecialchars(urldecode($_GET['msg'])) : 'Periksa kembali data obat dan tanggal kedaluwarsa.'; ?>
                             </div>
                         <?php endif; ?>
                     <?php endif; ?>

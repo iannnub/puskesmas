@@ -151,7 +151,8 @@ try {
     $stoks = $stmt_stok_list->fetchAll();
 
 } catch (PDOException $e) {
-    die("Error mengambil data: " . $e->getMessage());
+    error_log("[SIVO STOK LIHAT ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat data saldo inventori. Silakan hubungi administrator.");
 }
 
 include '../templates/header.php';

@@ -9,12 +9,18 @@ if (isset($_SESSION['user_id'])) {
 
 
 $error_message = '';
+$success_message = '';
 if (isset($_GET['error'])) {
     if ($_GET['error'] == 1) {
         $error_message = "Login Gagal. Username atau Password salah.";
     } elseif ($_GET['error'] == 2) {
         $error_message = "Anda harus login untuk mengakses halaman itu.";
+    } elseif ($_GET['error'] === 'timeout') {
+        $error_message = "Sesi Anda telah berakhir karena tidak ada aktivitas selama 30 menit. Silakan login kembali.";
     }
+}
+if (isset($_GET['status']) && $_GET['status'] === 'logout') {
+    $success_message = "Anda telah berhasil logout dari sistem.";
 }
 ?>
 <!DOCTYPE html>
@@ -96,8 +102,7 @@ if (isset($_GET['error'])) {
                     <span style="color: hsl(218, 81%, 75%)">Sistem Informasi Inventori Obat</span>
                 </h1>
                 <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
-                    Selamat datang di SIVO (Sistem Informasi Inventori Obat) Puskesmas Wuluhan.
-                    Silakan login untuk mengelola stok, melihat riwayat, dan membuat permintaan obat.
+                    Pengelolaan inventori, riwayat distribusi, dan verifikasi permintaan obat antar-unit di Puskesmas Wuluhan.
                 </p>
             </div>
 
@@ -112,12 +117,17 @@ if (isset($_GET['error'])) {
                   
                         <form action="<?php echo BASE_URL; ?>auth/proses_login.php" method="POST">
                             
-                            <h3 class="text-center mb-4">Silakan Login</h3>
+                            <h3 class="text-center mb-4">Masuk ke Sistem</h3>
                             
                          
                             <?php if (!empty($error_message)): ?>
                                 <div class="alert alert-danger" role="alert">
-                                    <?php echo $error_message; ?>
+                                    <?php echo htmlspecialchars($error_message); ?>
+                                </div>
+                            <?php endif; ?>
+                            <?php if (!empty($success_message)): ?>
+                                <div class="alert alert-success" role="alert">
+                                    <?php echo htmlspecialchars($success_message); ?>
                                 </div>
                             <?php endif; ?>
 

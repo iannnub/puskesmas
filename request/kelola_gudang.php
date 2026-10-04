@@ -45,7 +45,8 @@ try {
     $requests = $stmt->fetchAll();
 
 } catch (PDOException $e) {
-    die("Error mengambil data: " . $e->getMessage());
+    error_log("[SIVO REQUEST GUDANG ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat antrean permintaan gudang. Silakan hubungi administrator.");
 }
 
 include '../templates/header.php';

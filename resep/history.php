@@ -71,7 +71,8 @@ try {
     $histories = $stmt->fetchAll();
 
 } catch (PDOException $e) {
-    die("Error: " . $e->getMessage());
+    error_log("[SIVO RESEP HISTORY ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat riwayat resep. Silakan hubungi administrator.");
 }
 
 include '../templates/header.php';

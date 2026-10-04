@@ -68,7 +68,8 @@ try {
     $pelayanans = $stmt_pel->fetchAll();
 
 } catch (PDOException $e) {
-    die("Error: " . $e->getMessage());
+    error_log("[SIVO RESEP EDIT ERROR] " . $e->getMessage());
+    die("Terjadi kesalahan sistem saat memuat data resep. Silakan hubungi administrator.");
 }
 
 $page_title = "Edit Resep #" . $id_resep;
