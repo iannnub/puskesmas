@@ -22,12 +22,12 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Siap untuk Keluar?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Konfirmasi Logout</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">Pilih "Logout" di bawah jika Anda siap untuk mengakhiri sesi Anda saat ini.</div>
+                <div class="modal-body">Sesi Anda akan diakhiri. Lanjutkan logout?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
                     <a class="btn btn-primary" href="<?php echo BASE_URL; ?>auth/logout.php">Logout</a>

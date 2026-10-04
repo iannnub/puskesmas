@@ -1,89 +1,89 @@
-# 🏥 SIVO Puskesmas | Sistem Informasi Inventori Obat Terpadu
+# SIVO Puskesmas: Sistem Informasi Inventori Obat
 
-> **Deskripsi Pendek:**
-> SIVO Puskesmas adalah Sistem Informasi Inventori Obat Terpadu untuk mengelola stok, riwayat penggunaan, & permintaan obat antar unit. Repositori ini mencakup backend PHP (InfinityFree) & frontend SEO (Vercel) dengan integrasi Open Graph meta tags.
+SIVO (Sistem Informasi Inventori Obat) adalah aplikasi web untuk mencatat inventori, riwayat distribusi, dan permintaan obat antar-unit di Puskesmas Wuluhan, Kabupaten Jember.
 
-Welcome to the repository of **SIVO Puskesmas**! Proyek ini adalah aplikasi web berkinerja tinggi dan komprehensif yang dibangun untuk membantu fasilitas kesehatan (Puskesmas Wuluhan) dalam mengelola inventaris obat, memantau riwayat keluar-masuk, dan memproses permintaan antar unit/gudang secara terpusat dan *real-time*.
-
-🌐 **Live Demo (SEO Frontend):** [https://sivo-wuluhan.vercel.app](https://sivo-wuluhan.vercel.app) *(Sesuaikan dengan URL Vercel Anda)*  
-🌐 **Live App (Backend):** [https://sivo-wuluhan.page.gd/](https://sivo-wuluhan.page.gd/)
+- **Frontend (Vercel):** [https://sivo-wuluhan.vercel.app](https://sivo-wuluhan.vercel.app)
+- **Aplikasi Web (Backend):** [https://sivo-wuluhan.page.gd/](https://sivo-wuluhan.page.gd/)
 
 ---
 
-## ✨ Features
-- 🛡️ **Keamanan Kelas Menengah:** Dibangun dengan *PDO Prepared Statements* untuk mencegah injeksi SQL, dan sistem *Role-Based Access Control (RBAC)* untuk memisahkan wewenang Admin dan Petugas Unit.
-- 📦 **Manajemen Stok Real-Time:** Kelola penerimaan, pengeluaran, mutasi/transfer, dan *Stock Opname* dengan catatan riwayat yang terekam permanen.
-- 📄 **Sistem Pelaporan Otomatis:** Ekspor Laporan Bulanan, Harian, Kartu Stok, dan Sasaran Mutu dengan format PDF maupun Excel.
-- 🎨 **Premium UI/UX (SB Admin 2):** *Dashboard* administratif yang responsif, bersih, dan profesional menggunakan Bootstrap 4.
-- 🔍 **SEO & Social Media Ready (Vercel):** Memiliki `index.html` dan `og-image.png` statis di *root* repositori yang memberikan tampilan *Glassmorphism* modern dan konfigurasi **Open Graph & Twitter Cards** yang sempurna saat tautan dibagikan di WhatsApp, Facebook, IG, dll.
+## Fitur Utama
+
+- **Manajemen Stok:** Pencatatan penerimaan obat gudang, mutasi transfer antar-unit, dan stok opname berkala.
+- **Permintaan Obat Antar-Unit:** Alur permintaan dari poli ke apotek serta apotek ke gudang dengan verifikasi kuantitas.
+- **Pelayanan Resep:** Pencatatan penggunaan obat per pasien beserta riwayat peresepan tiap poli.
+- **Pelaporan:** Ekspor laporan mutasi bulanan (LPLPO), rekapitulasi harian, dan kartu stok ke format PDF dan Excel.
+- **Akses Berbasis Peran (RBAC):** Pemisahan wewenang akses untuk Super Admin, Petugas Gudang, Apoteker, dan Petugas Poli.
 
 ---
 
-## 🛠️ Tech Stack
-- **Backend Language:** PHP Native 
-- **Database:** MySQL (MariaDB)
-- **Database Driver:** PHP Data Objects (PDO)
-- **Frontend / Styling:** HTML5, CSS3, Bootstrap 4 (SB Admin 2 Template), jQuery
-- **Reporting Engine:** TCPDF (PDF) & PhpSpreadsheet (Excel)
-- **Deployment (Frontend/SEO):** Vercel
-- **Deployment (App Server):** InfinityFree / cPanel
+## Tech Stack
+
+- **Backend:** PHP Native (PDO)
+- **Database:** MariaDB / MySQL
+- **Frontend:** Bootstrap 4 (SB Admin 2), jQuery, DataTables
+- **Ekspor Dokumen:** TCPDF (PDF) dan PhpSpreadsheet (Excel)
+- **Hosting:** Apache / cPanel / InfinityFree, Vercel (landing page)
 
 ---
 
-## 💻 Local Development
-Ingin menjalankan proyek ini secara lokal di komputer Anda? Ikuti langkah-langkah berikut:
+## Instalasi Lokal
 
-1. **Clone the repository:**
+Langkah instalasi sistem pada lingkungan lokal:
+
+1. **Clone repositori:**
    ```bash
    git clone https://github.com/iannnub/puskesmas.git
    cd puskesmas
    ```
-2. **Siapkan Database:**
-   - Buka XAMPP, nyalakan **Apache** dan **MySQL**.
-   - Buka phpMyAdmin (`http://localhost/phpmyadmin`).
-   - Buat database baru bernama `dbpuskesmas`.
-   - Lakukan **Import** menggunakan file `dbpuskesmas.sql` yang tersedia di dalam repositori ini.
-3. **Akses Aplikasi:**
-   - Buka *browser* dan ketik: `http://localhost/puskesmas/`
 
-*(Catatan: File `config.php` telah dirancang cerdas untuk mendeteksi secara otomatis apakah ia berjalan di `localhost` atau di _server_ produksi InfinityFree).*
+2. **Konfigurasi Database:**
+   - Nyalakan service **Apache** dan **MySQL** (misal via XAMPP).
+   - Buat database baru bernama `dbpuskesmas` melalui phpMyAdmin atau MySQL CLI:
+     ```sql
+     CREATE DATABASE dbpuskesmas;
+     ```
+   - Import skema dan data awal dari file `dbpuskesmas.sql`.
 
----
+3. **Pengaturan Koneksi:**
+   - Buka `config.php` dan sesuaikan parameter host, user, password, serta nama database.
 
-## 📂 Project Structure
-- `index.html` : **(Vercel Frontend)** *Landing page* statis dengan *Glassmorphism* & *Meta Tags* untuk optimasi *preview* tautan sosial media.
-- `og-image.png` : Aset visual ilustrasi AI untuk *thumbnail* saat tautan *website* dibagikan.
-- `config.php` : File konfigurasi *database* (Otomatis beralih antara konfigurasi Lokal dan InfinityFree).
-- `auth/` : Modul sistem Autentikasi (Login, Logout, & Enkripsi *Password*).
-- `master/` : Modul *Create, Read, Update, Delete* (CRUD) untuk Data Obat, Dokter, Unit, Poli, dan Pelayanan.
-- `stok/` & `request/` : Modul inti yang menangani *logic* pengurangan stok, pemindahan antar gudang, dan persetujuan barang.
-- `laporan/` : Kumpulan *script* untuk membangun visualisasi cetak PDF dan Excel.
-- `templates/` : *Component* antarmuka UI seperti *Sidebar*, *Header*, dan pengecekan sesi.
+4. **Akses Aplikasi:**
+   - Buka browser dan arahkan ke: `http://localhost/puskesmas/`
 
 ---
 
-## 🚀 Deployment
+## Struktur Direktori
 
-Proyek ini dirancang secara *hybrid* (*Monorepo*) untuk di-_deploy_ di dua layanan berbeda guna mendapatkan performa maksimal:
-
-### 1. Vercel (Khusus Tampilan *Link Share*)
-- Push repositori ini ke akun GitHub Anda.
-- Pergi ke Vercel, *login* menggunakan GitHub.
-- Tambahkan proyek baru, *import* repositori `puskesmas` ini. Vercel otomatis hanya akan membaca `index.html`.
-- Bagikan *URL* Vercel tersebut ke Sosmed Anda untuk *preview* tautan yang elegan!
-
-### 2. InfinityFree (Khusus *Backend Server*)
-- *Zip/Compress* seluruh isi folder proyek ini.
-- *Upload* lalu *Extract* seluruh file tersebut ke dalam folder `htdocs` di *File Manager* InfinityFree.
-- Buat *Database* MySQL di InfinityFree, lalu *Import* file `dbpuskesmas.sql` via phpMyAdmin.
-- Ubah kredensial di `config.php` sesuai dengan informasi dari cPanel InfinityFree.
+- `index.html`: Landing page statis untuk hosting frontend.
+- `config.php`: Konfigurasi koneksi database PDO dan konstanta URL dasar (`BASE_URL`).
+- `auth/`: Skrip login, logout, dan verifikasi sesi pengguna.
+- `master/`: Modul pengelolaan data master obat, dokter, unit, dan poliklinik.
+- `stok/`: Modul pencatatan penerimaan, mutasi transfer stok, dan stok opname.
+- `request/`: Modul pengajuan dan verifikasi persetujuan permintaan obat antar-unit.
+- `resep/`: Modul pencatatan peresepan pasien dan pengurangan stok pelayanan.
+- `laporan/`: Skrip agregasi data LPLPO dan generator cetak PDF/Excel.
+- `templates/`: Komponen layout bersama (sidebar, header topbar, footer).
 
 ---
 
-## 👨‍💻 About Me
-**Septian Putra Rachman Hakim (iannnub)**  
-Saya adalah seorang *Software Engineer* dan spesialis IT yang berdedikasi membangun infrastruktur perangkat lunak berkualitas tinggi. Saya memiliki antusiasme mendalam terhadap pemecahan masalah sistematis (*Systematic Problem Solving*), pengembangan web berkinerja tinggi, serta integrasi solusi *Artificial Intelligence*.
+## Deployment
 
-🔗 **Connect with me:**
-- [GitHub](https://github.com/iannnub)
-- [LinkedIn](https://linkedin.com/) *(Tambahkan URL LinkedIn Anda)*
+Proyek ini menggunakan dua target deployment:
+
+### 1. Vercel (Halaman Web Statis)
+- Import repositori GitHub ke dashboard Vercel.
+- Vercel akan menyajikan `index.html` dan aset terkait.
+
+### 2. Server PHP / cPanel / Apache (Aplikasi Utama)
+- Salin seluruh berkas proyek ke direktori web server (misal: `public_html` atau `htdocs`).
+- Buat database MySQL pada server target dan import `dbpuskesmas.sql`.
+- Sesuaikan konfigurasi database pada `config.php`.
+
+---
+
+## Pengembang
+
+- **Septian Putra Rachman Hakim (iannnub)**
+- Universitas Muhammadiyah Jember
+- GitHub: [https://github.com/iannnub](https://github.com/iannnub)
