@@ -1,0 +1,10 @@
+{
+  "updated": true,
+  "cwv": {
+    "cls": 0,
+    "lcp": 392,
+    "ttfb": 117,
+    "domReady": 392
+  },
+  "consoleErrors": []
+}
