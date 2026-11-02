@@ -213,7 +213,7 @@ include '../templates/header.php';
                                     <form action="<?php echo $endpoint_proses; ?>" method="POST" class="mt-2">
                                         <input type="hidden" name="id_request" value="<?php echo $request_header['id_request']; ?>">
                                         <button type="submit"
-                                            onclick="return confirm('Proses request #<?php echo $request_header['id_request']; ?>?\n\nSistem akan mengecek stok Apotek:\n✓ Cukup  → kirim semua (Completed)\n~ Kurang → kirim yang ada (Partial)\n✗ Habis  → Cancelled');"
+                                            onclick="return confirm('Proses request #<?php echo $request_header['id_request']; ?>?\n\nSistem akan mengecek stok Apotek:\n[CUKUP] Kirim semua (Completed)\n[KURANG] Kirim stok tersedia (Partial)\n[HABIS] Batalkan request (Cancelled)');"
                                             class="btn btn-success btn-icon-split">
                                             <span class="icon text-white-50"><i class="fas fa-check"></i></span>
                                             <span class="text">Proses Request Ini</span>
