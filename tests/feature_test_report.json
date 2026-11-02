@@ -1,0 +1,35 @@
+{
+  "testResults": [
+    {
+      "step": "Auth / Login",
+      "status": "PASS",
+      "message": "Logged in successfully to Dashboard"
+    },
+    {
+      "step": "Master Data Obat",
+      "status": "PASS",
+      "message": "Medicine E2E-4838 added successfully"
+    },
+    {
+      "step": "Stok Penerimaan",
+      "status": "PASS",
+      "message": "Stock received and inventory increased"
+    },
+    {
+      "step": "Stok Transfer",
+      "status": "PASS",
+      "message": "Transfer 20 units Gudang -> Apotek succeeded"
+    },
+    {
+      "step": "Input Resep & Dispensing",
+      "status": "PASS",
+      "message": "Prescription dispensed successfully and stock deducted from unit"
+    },
+    {
+      "step": "Laporan LPLPO Bulanan",
+      "status": "PASS",
+      "message": "Monthly report view rendered successfully"
+    }
+  ],
+  "consoleErrors": []
+}

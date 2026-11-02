@@ -2,7 +2,7 @@
 $current_page = $_SERVER['REQUEST_URI'];
 ?>
 
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="background-image: none !important; background-color: #1e3a8a !important;">
 
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo BASE_URL; ?>dashboard.php">
         <div class="sidebar-brand-icon rotate-n-15">

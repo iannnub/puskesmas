@@ -34,9 +34,45 @@
     </script>
     
     <style>
-        /* Style agar Select2 tidak "meledak" */
+        /* Style agar Select2 pas di card */
         .select2-container { 
-            width: 100% !important; /* Ganti dari 93% ke 100% agar pas di card */
+            width: 100% !important;
+        }
+
+        /* Anti-Gradient Global Enforcement: Clean Solid Healthcare Palette */
+        .bg-gradient-primary,
+        .bg-gradient-secondary,
+        .bg-gradient-success,
+        .bg-gradient-info,
+        .bg-gradient-warning,
+        .bg-gradient-danger,
+        .bg-gradient-light,
+        .bg-gradient-dark,
+        .sidebar-dark .bg-gradient-primary {
+            background-image: none !important;
+        }
+        .bg-gradient-primary, .sidebar.bg-gradient-primary { background-color: #1e3a8a !important; }
+        .bg-gradient-success { background-color: #15803d !important; }
+        .bg-gradient-info { background-color: #0369a1 !important; }
+        .bg-gradient-warning { background-color: #b45309 !important; }
+        .bg-gradient-danger { background-color: #b91c1c !important; }
+        .bg-gradient-secondary { background-color: #475569 !important; }
+        .bg-gradient-dark { background-color: #0f172a !important; }
+
+        /* Keyboard Accessibility & Focus-Visible WCAG AA */
+        :focus-visible {
+            outline: 2px solid #2563eb !important;
+            outline-offset: 2px !important;
+        }
+
+        /* Mobile Touch Target and Responsive Enhancements */
+        @media (max-width: 768px) {
+            .btn, .form-control, .page-link {
+                min-height: 44px;
+            }
+            .table-responsive {
+                border: 0;
+            }
         }
     </style>
 

@@ -7,7 +7,6 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
-
 $error_message = '';
 $success_message = '';
 if (isset($_GET['error'])) {
@@ -32,94 +31,108 @@ if (isset($_GET['status']) && $_GET['status'] === 'logout') {
     <meta name="description" content="Sistem Informasi Inventori Obat Puskesmas Wuluhan">
     <title>Login - SIVO Puskesmas</title>
 
-
     <link href="<?php echo BASE_URL; ?>assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <link href="<?php echo BASE_URL; ?>assets/css/sb-admin-2.min.css" rel="stylesheet">
-    
 
     <style>
-        .background-radial-gradient {
-            background-color: hsl(218, 41%, 15%);
-            background-image: radial-gradient(650px circle at 0% 0%,
-                    hsl(218, 41%, 35%) 15%,
-                    hsl(218, 41%, 30%) 35%,
-                    hsl(218, 41%, 20%) 75%,
-                    hsl(218, 41%, 19%) 80%,
-                    transparent 100%),
-                radial-gradient(1250px circle at 100% 100%,
-                    hsl(218, 41%, 45%) 15%,
-                    hsl(218, 41%, 30%) 35%,
-                    hsl(218, 41%, 20%) 75%,
-                    hsl(218, 41%, 19%) 80%,
-                    transparent 100%);
-         
-            min-height: 100vh; 
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
-        #radius-shape-1 {
-            height: 220px;
-            width: 220px;
-            top: -60px;
-            left: -130px;
-            background: radial-gradient(#44006b, #ad1fff);
-            overflow: hidden;
+        .login-wrapper {
+            background-color: #0f172a;
+            min-height: 100vh;
         }
 
-        #radius-shape-2 {
-            border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
-            bottom: -60px;
-            right: -110px;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(#44006b, #ad1fff);
-            overflow: hidden;
+        .card-login {
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+            color: #1e293b;
         }
 
-        .bg-glass {
+        .card-login h3 {
+            color: #0f172a;
+            font-weight: 700;
+        }
 
-            background-color: hsla(0, 0%, 100%, 0.85) !important;
-            backdrop-filter: saturate(200%) blur(25px);
+        .card-login .form-label {
+            color: #334155;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .card-login .form-control {
+            min-height: 44px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .card-login .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-login {
+            min-height: 44px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            background-color: #2563eb !important;
+            border-color: #2563eb !important;
+            color: #ffffff !important;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-login:hover,
+        .btn-login:focus {
+            background-color: #1d4ed8 !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        :focus-visible {
+            outline: 2px solid #2563eb !important;
+            outline-offset: 2px !important;
         }
     </style>
 
 </head>
 <body>
 
-
-<section class="background-radial-gradient overflow-hidden">
- 
+<section class="login-wrapper overflow-hidden">
     <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5 d-flex align-items-center" style="min-height: 90vh;">
-        <div class="row gx-lg-5 align-items-center mb-5">
+        <div class="row gx-lg-5 align-items-center mb-5 w-100">
  
             <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
-                <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+                <h1 class="my-4 display-5 fw-bold ls-tight text-white">
                     SIVO Puskesmas
                     <br />
-                    <span style="color: hsl(218, 81%, 75%)">Sistem Informasi Inventori Obat</span>
+                    <span class="font-weight-bold" style="color: #60a5fa !important;">Sistem Informasi Inventori Obat</span>
                 </h1>
-                <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
+                <p class="mb-4" style="color: #cbd5e1; font-size: 1.1rem; line-height: 1.6;">
                     Pengelolaan inventori, riwayat distribusi, dan verifikasi permintaan obat antar-unit di Puskesmas Wuluhan.
                 </p>
             </div>
 
-       
             <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
-                <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
-                <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
-
-                <div class="card bg-glass">
+                <div class="card card-login">
                     <div class="card-body px-4 py-5 px-md-5">
                         
-                  
                         <form action="<?php echo BASE_URL; ?>auth/proses_login.php" method="POST">
                             
                             <h3 class="text-center mb-4">Masuk ke Sistem</h3>
                             
-                         
                             <?php if (!empty($error_message)): ?>
                                 <div class="alert alert-danger" role="alert">
                                     <?php echo htmlspecialchars($error_message); ?>
@@ -131,24 +144,19 @@ if (isset($_GET['status']) && $_GET['status'] === 'logout') {
                                 </div>
                             <?php endif; ?>
 
-                     
-                            <div class="form-group">
-                         
+                            <div class="form-group text-left">
                                 <label class="form-label" for="username">Username</label>
-                                <input type="text" id="username" name="username" class="form-control" required />
+                                <input type="text" id="username" name="username" class="form-control" autocomplete="username" required />
                             </div>
 
-                
-                            <div class="form-group">
+                            <div class="form-group text-left">
                                 <label class="form-label" for="password">Password</label>
-                                <input type="password" id="password" name="password" class="form-control" required />
+                                <input type="password" id="password" name="password" class="form-control" autocomplete="current-password" required />
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-block mb-4">
+                            <button type="submit" class="btn btn-login btn-block mb-4 mt-4">
                                 Login
                             </button>
-
-
                             
                         </form>
 
@@ -158,8 +166,6 @@ if (isset($_GET['status']) && $_GET['status'] === 'logout') {
         </div>
     </div>
 </section>
-
-
 
 <script src="<?php echo BASE_URL; ?>assets/vendor/jquery/jquery.min.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

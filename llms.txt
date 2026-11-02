@@ -1,0 +1,24 @@
+# SIVO Puskesmas Wuluhan
+
+> Sistem Informasi Inventori Obat Terpadu Puskesmas Wuluhan, Kabupaten Jember, Jawa Timur.
+
+## Deskripsi Singkat
+SIVO (Sistem Informasi Inventori Obat) adalah platform web terpadu untuk tata kelola farmasi puskesmas. Sistem ini mengintegrasikan seluruh rantai pasok obat: penerimaan obat dari Gudang Farmasi Kabupaten (GFK), verifikasi stok gudang induk, distribusi multi-unit (Apotek, Rawat Inap, UGD, Pustu, Poskesdes), mutasi parsial (Partial Delivery), transaksi resep rawat jalan ber-batch FEFO, audit trail stok mutasi immutable, serta pelaporan standar LPLPO (Laporan Pemakaian dan Lembar Permintaan Obat).
+
+## Informasi Inti
+- **Organisasi**: Puskesmas Wuluhan
+- **Wilayah Operasional**: Kecamatan Wuluhan, Kabupaten Jember, Jawa Timur, Indonesia
+- **Kategori**: Healthcare Information System / Puskesmas Pharmacy Management
+- **Akses Sistem**: Web Browser (Desktop & Mobile Responsif)
+
+## Modul Utama
+- **Dashboard Eksekutif**: Metrik stok real-time, grafik tren distribusi, peringatan obat kedaluwarsa & stok minimum.
+- **Master Data**: Formularium obat, data poli/pelayanan, unit penyimpanan, dan role-based access control (RBAC).
+- **Manajemen Stok**: Penerimaan dari GFK/PBF, penyesuaian stok opname, dan transfer antar unit.
+- **Request & Distribusi**: Pengajuan permintaan obat dari unit/poli ke gudang, verifikasi gudang dengan dukungan partial fulfillment.
+- **Pelayanan Resep**: Transaksi dispensing obat dengan alokasi batch otomatis FEFO (First Expired, First Out) dan reversal entry pembatalan.
+- **Pelaporan Regulasi**: LPLPO bulanan, rekap sub-unit, kartu stok elektronik, serta ekspor format PDF dan Excel.
+
+## Spesifikasi Teknis
+- Arsitektur: Web Monolith (PHP Native, MariaDB/MySQL, Bootstrap SB-Admin-2, jQuery, DataTables, Select2)
+- Keamanan: OWASP ASVS 4.0 compliant, PDO Prepared Statements, CSRF Protection, Anti-IDOR, Session Hijacking Prevention, Password Hashing BCRYPT.

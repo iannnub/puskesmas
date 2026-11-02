@@ -1,0 +1,16 @@
+# SIVO Puskesmas - Robots Exclusion Protocol
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /og-image.png
+Allow: /llms.txt
+Disallow: /auth/
+Disallow: /master/
+Disallow: /stok/
+Disallow: /request/
+Disallow: /resep/
+Disallow: /laporan/
+Disallow: /tests/
+
+Sitemap: https://sivo-wuluhan.vercel.app/sitemap.xml
+Sitemap: https://sivo-wuluhan.page.gd/sitemap.xml
