@@ -26,22 +26,36 @@ desktop.ini
 nbproject/
 
 # ===========================
-# Database Dumps (PENTING!)
+# Database Dumps (PENTING: Jangan upload database dengan data riil)
 # ===========================
 *.sql
-!dbpuskesmas.sql
+!database_schema.sql
 !migrations/*.sql
+dbpuskesmas.sql
 *.sql.gz
 *.sql.bak
 *.dump
 
 # ===========================
-# Environment & Credentials
+# Environment & Credentials (SENSITIF)
 # ===========================
 .env
 .env.local
 .env.production
 .env.*.local
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+
+# ===========================
+# Test Artifacts & Temporary Output
+# ===========================
+tests/screenshots/
+tests/*_report.json
+tests/*.json
+.phpunit.result.cache
 
 # ===========================
 # Logs

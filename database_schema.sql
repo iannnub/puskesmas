@@ -1,27 +1,24 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Apr 14, 2026 at 01:14 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- ========================================================
+-- SIVO Puskesmas - Sanitized Public Database Schema
+-- Sistem Informasi Inventori Obat Puskesmas Wuluhan
+-- 
+-- PERINGATAN KEAMANAN:
+-- Skema ini telah disanitasi untuk repositori publik.
+-- Tidak mengandung data rekam medis pasien, histori transaksi riil,
+-- maupun kredensial produksi.
+-- ========================================================
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `dbpuskesmas`
---
-
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_dokter`
@@ -41,7 +38,9 @@ INSERT INTO `tbl_dokter` (`id_dokter`, `nama_dokter`, `id_poli`) VALUES
 (1, 'bayu', 7),
 (2, 'rehan', 8);
 
+
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_jenis_obat`
@@ -60,7 +59,9 @@ INSERT INTO `tbl_jenis_obat` (`id_jenis_obat`, `nama_jenis_obat`) VALUES
 (2, 'BLUD'),
 (1, 'IFK');
 
+
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_kategori_obat`
@@ -92,7 +93,9 @@ INSERT INTO `tbl_kategori_obat` (`id_kategori_obat`, `id_jenis_obat`, `nama_kate
 (13, 2, 'BELANJA BAHAN LAINNYA'),
 (14, 2, 'BELANJA BAHAN KIMIA');
 
+
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_konfigurasi`
@@ -104,7 +107,9 @@ CREATE TABLE `tbl_konfigurasi` (
   `setting_value` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_log_stok`
@@ -125,64 +130,11 @@ CREATE TABLE `tbl_log_stok` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_log_stok`
---
+-- Data dump for `tbl_log_stok` excluded for privacy & security.
 
-INSERT INTO `tbl_log_stok` (`id_log`, `tgl_log`, `id_obat`, `id_unit`, `sumber_data`, `stok_sebelum`, `masuk`, `keluar`, `stok_sesudah`, `keterangan`, `id_referensi_transaksi`) VALUES
-(1, '2025-11-11 14:15:00', 1, 1, 'Penerimaan', 0, 5, 0, 5, 'ian', 1),
-(2, '2025-11-11 14:16:39', 1, 1, 'Transfer', 5, 0, 3, 2, 'Transfer Keluar ke ', 1),
-(3, '2025-11-11 14:16:39', 1, 2, 'Transfer', 0, 3, 0, 3, 'Transfer Masuk dari ', 1),
-(4, '2025-11-11 14:29:40', 1, 2, 'Stok Opname', 3, 2, 0, 5, 'tes', 11),
-(5, '2025-11-11 15:31:00', 2, 1, 'Penerimaan', 0, 5, 0, 5, '', 2),
-(6, '2025-11-11 15:31:22', 1, 1, 'Transfer', 2, 0, 1, 1, 'Request #2', 2),
-(7, '2025-11-11 15:31:22', 1, 3, 'Transfer', 0, 1, 0, 1, 'Request #2', 2),
-(8, '2025-11-11 15:31:22', 2, 1, 'Transfer', 5, 0, 4, 1, 'Request #2', 3),
-(9, '2025-11-11 15:31:22', 2, 3, 'Transfer', 0, 4, 0, 4, 'Request #2', 3),
-(10, '2025-11-18 10:09:00', 1, 4, 'Penerimaan', 0, 3, 0, 3, 'adgahs', 3),
-(11, '2025-11-18 10:10:41', 1, 1, 'Transfer', 1, 0, 1, 0, 'Transfer Keluar ke ', 4),
-(12, '2025-11-18 10:10:41', 1, 4, 'Transfer', 3, 1, 0, 4, 'Transfer Masuk dari ', 4),
-(13, '2025-11-18 10:10:00', 1, 4, 'Resep', 4, 0, 1, 3, 'Pemakaian Resep Pasien: abcd', 1),
-(14, '2025-11-18 10:27:38', 2, 1, 'Transfer', 1, 0, 1, 0, 'Request #1', 5),
-(15, '2025-11-18 10:27:38', 2, 3, 'Transfer', 4, 1, 0, 5, 'Request #1', 5),
-(16, '2026-02-03 19:31:00', 1, 3, 'Resep', 1, 0, 1, 0, 'Pemakaian Resep Pasien: ian', 2),
-(17, '2026-02-03 19:36:00', 1, 2, 'Penerimaan', 5, 10, 0, 15, 'blabla', 4),
-(19, '2026-02-03 19:48:00', 2, 3, 'Resep', 5, 0, 1, 4, 'Pemakaian Resep Pasien: ian', 4),
-(20, '2026-03-24 19:39:30', 2, 1, 'Stok Opname', 0, 2, 0, 2, 'a', 11),
-(21, '2026-03-24 19:39:51', 2, 1, 'Transfer', 2, 0, 1, 1, 'Transfer Keluar ke ', 6),
-(22, '2026-03-24 19:39:51', 2, 3, 'Transfer', 4, 1, 0, 5, 'Transfer Masuk dari ', 6),
-(23, '2026-03-24 19:40:00', 1, 1, 'Penerimaan', 0, 1, 0, 1, '', 5),
-(24, '2026-03-24 19:41:09', 1, 1, 'Transfer', 1, 0, 1, 0, 'Request #3', 7),
-(25, '2026-03-24 19:41:09', 1, 3, 'Transfer', 0, 1, 0, 1, 'Request #3', 7),
-(26, '2026-03-24 19:41:09', 2, 1, 'Transfer', 1, 0, 1, 0, 'Request #3', 8),
-(27, '2026-03-24 19:41:09', 2, 3, 'Transfer', 5, 1, 0, 6, 'Request #3', 8),
-(28, '2026-03-24 19:43:00', 1, 1, 'Penerimaan', 0, 1, 0, 1, 'admin', 6),
-(29, '2026-03-24 19:43:00', 1, 1, 'Penerimaan', 1, 1, 0, 2, '1', 7),
-(30, '2026-03-24 19:44:11', 1, 1, 'Transfer', 2, 0, 2, 0, 'Request #4', 9),
-(31, '2026-03-24 19:44:11', 1, 3, 'Transfer', 1, 2, 0, 3, 'Request #4', 9),
-(32, '2026-03-24 19:49:00', 1, 3, 'Resep', 3, 0, 1, 2, 'Pemakaian Resep Pasien: ', 5),
-(33, '2026-03-31 19:10:00', 1, 3, 'Resep', 2, 0, 1, 1, 'Pemakaian Resep Pasien: blek', 6),
-(34, '2026-04-03 19:58:00', 1, 1, 'Penerimaan', 0, 1, 0, 1, 'aku', 8),
-(45, '2026-04-10 22:08:00', 2, 1, 'Penerimaan', 0, 10, 0, 10, '', 9),
-(46, '2026-04-10 22:08:43', 1, 1, 'Transfer', 1, 0, 1, 0, 'Request #5', 10),
-(47, '2026-04-10 22:08:43', 1, 3, 'Transfer', 0, 1, 0, 1, 'Request #5', 10),
-(48, '2026-04-10 22:09:26', 2, 1, 'Transfer', 10, 0, 10, 0, 'Transfer Keluar ke ', 11),
-(49, '2026-04-10 22:09:26', 2, 3, 'Transfer', 3, 10, 0, 13, 'Transfer Masuk dari ', 11),
-(50, '2026-04-10 22:10:00', 2, 1, 'Penerimaan', 0, 10, 0, 10, '', 10),
-(51, '2026-04-10 22:11:05', 2, 1, 'Transfer', 10, 0, 10, 0, 'Request #6', 12),
-(52, '2026-04-10 22:11:05', 2, 3, 'Transfer', 13, 10, 0, 23, 'Request #6', 12),
-(53, '2026-04-10 22:11:00', 2, 1, 'Penerimaan', 0, 20, 0, 20, '', 11),
-(56, '2026-04-10 23:07:00', 1, 3, 'Resep', 1, 0, 1, 0, 'Pemakaian Resep Pasien: blek', 12),
-(57, '2026-04-10 23:06:00', 2, 3, 'Resep', 22, 0, 1, 22, 'Edit Resep Pasien: asd (Dr. saya)', 11),
-(58, '2026-04-10 21:55:00', 2, 3, 'Resep', 22, 0, 1, 22, 'Edit Resep Pasien: asd (Dr. saya)', 9),
-(59, '2026-04-10 21:55:00', 2, 3, 'Resep', 22, 0, 1, 22, 'Edit Resep Pasien: aa (Dr. saya)', 10),
-(60, '2026-04-10 21:30:00', 2, 3, 'Resep', 22, 0, 1, 22, 'Edit Resep Pasien: blek (Dr. saya)', 8),
-(61, '2026-04-08 21:45:00', 1, 3, 'Resep', 0, 0, 1, 0, 'Edit Resep Pasien: blek (Dr. saya)', 7),
-(62, '2026-04-10 23:30:00', 2, 3, 'Resep', 22, 0, 1, 21, 'Pemakaian Resep Pasien: blek', 1),
-(63, '2026-04-10 23:31:00', 2, 3, 'Resep', 21, 0, 1, 20, 'Pemakaian Resep Pasien: blek', 1),
-(64, '2026-04-14 08:21:00', 1, 4, 'Resep', 3, 0, 1, 2, 'Pemakaian Resep Pasien: blek', 2),
-(65, '2026-04-14 10:35:21', 1, 3, 'Stok Opname', 0, 1, 0, 1, 'admin', 11);
 
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_obat`
@@ -1339,7 +1291,9 @@ INSERT INTO `tbl_obat` (`id_obat`, `kode_obat`, `nama_obat`, `satuan`, `id_kateg
 (1135, 'BLUD-0180', 'Oxytocin Inj', 'Ampul', 14),
 (1136, 'BLUD-0181', 'Glove Steril 7', 'Pcs', 14);
 
+
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_pelayanan`
@@ -1358,7 +1312,9 @@ INSERT INTO `tbl_pelayanan` (`id_pelayanan`, `jenis_pelayanan`) VALUES
 (2, 'BPJS'),
 (1, 'UMUM');
 
+
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_poli`
@@ -1385,7 +1341,9 @@ INSERT INTO `tbl_poli` (`id_poli`, `id_unit_stok_default`, `nama_poli`) VALUES
 (8, 4, 'KB Poned'),
 (9, 5, 'Rawat Inap');
 
+
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_request_detail`
@@ -1400,20 +1358,11 @@ CREATE TABLE `tbl_request_detail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_request_detail`
---
+-- Data dump for `tbl_request_detail` excluded for privacy & security.
 
-INSERT INTO `tbl_request_detail` (`id_request_detail`, `id_request`, `id_obat`, `jumlah_request`) VALUES
-(1, 1, 2, 1),
-(2, 2, 1, 1),
-(3, 2, 2, 4),
-(4, 3, 1, 1),
-(5, 3, 2, 1),
-(6, 4, 1, 2),
-(7, 5, 1, 1),
-(8, 6, 2, 10);
 
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_request_header`
@@ -1432,18 +1381,11 @@ CREATE TABLE `tbl_request_header` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_request_header`
---
+-- Data dump for `tbl_request_header` excluded for privacy & security.
 
-INSERT INTO `tbl_request_header` (`id_request`, `tgl_request`, `id_user_request`, `id_unit_tujuan`, `status`, `keterangan_request`, `id_user_approve`, `tgl_approve`) VALUES
-(1, '2025-11-11 15:17:19', 7, 3, 'Completed', '', 11, '2025-11-18 10:27:38'),
-(2, '2025-11-11 15:23:17', 7, 3, 'Completed', 'testing', 11, '2025-11-11 15:31:22'),
-(3, '2026-02-03 19:26:53', 7, 3, 'Completed', '', 11, '2026-03-24 19:41:09'),
-(4, '2026-02-03 19:41:05', 7, 3, 'Completed', '', 11, '2026-03-24 19:44:11'),
-(5, '2026-03-31 19:11:50', 7, 3, 'Completed', '', 11, '2026-04-10 22:08:43'),
-(6, '2026-04-10 22:07:15', 7, 3, 'Completed', '', 11, '2026-04-10 22:11:05');
 
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_resep_detail`
@@ -1459,14 +1401,11 @@ CREATE TABLE `tbl_resep_detail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_resep_detail`
---
+-- Data dump for `tbl_resep_detail` excluded for privacy & security.
 
-INSERT INTO `tbl_resep_detail` (`id_resep_detail`, `id_resep`, `id_obat`, `id_unit_asal`, `jumlah_keluar`, `jenis_racikan`) VALUES
-(1, 1, 2, 3, 1, 'Non Racikan'),
-(2, 2, 1, 4, 1, 'Non Racikan');
 
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_resep_header`
@@ -1486,14 +1425,11 @@ CREATE TABLE `tbl_resep_header` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_resep_header`
---
+-- Data dump for `tbl_resep_header` excluded for privacy & security.
 
-INSERT INTO `tbl_resep_header` (`id_resep`, `tgl_resep`, `nama_pasien`, `id_poli`, `id_dokter`, `id_pelayanan`, `id_user_pencatat`, `kelengkapan_resep`, `kesalahan_resep`, `sesuai_formularium`) VALUES
-(1, '2026-04-10 23:31:00', 'blek', 7, 1, 2, 7, 'Lengkap', 'Tidak Ada', 'Sesuai'),
-(2, '2026-04-14 08:21:00', 'blek', 8, 2, 1, 8, 'Lengkap', 'Tidak Ada', 'Sesuai');
 
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_role`
@@ -1516,7 +1452,9 @@ INSERT INTO `tbl_role` (`id_role`, `nama_role`, `deskripsi_role`) VALUES
 (4, 'Poli Belakang', 'Operator Mini. Melihat stok unit sendiri dan input resep sendiri.'),
 (5, 'Apotek', 'mengirim eceran obat');
 
+
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_stok_inventori`
@@ -1533,18 +1471,11 @@ CREATE TABLE `tbl_stok_inventori` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_stok_inventori`
---
+-- Data dump for `tbl_stok_inventori` excluded for privacy & security.
 
-INSERT INTO `tbl_stok_inventori` (`id_stok`, `id_obat`, `id_unit`, `stok_akhir`, `stok_minimum`, `updated_at`) VALUES
-(1, 1, 1, 0, 10, '2026-04-10 22:08:43'),
-(2, 1, 2, 15, 10, '2026-02-03 19:36:53'),
-(3, 2, 1, 20, 10, '2026-04-10 22:11:26'),
-(4, 1, 3, 1, 10, '2026-04-14 10:35:21'),
-(5, 2, 3, 20, 10, '2026-04-10 23:31:54'),
-(6, 1, 4, 2, 10, '2026-04-14 08:21:35');
 
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_transaksi_masuk`
@@ -1561,23 +1492,11 @@ CREATE TABLE `tbl_transaksi_masuk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_transaksi_masuk`
---
+-- Data dump for `tbl_transaksi_masuk` excluded for privacy & security.
 
-INSERT INTO `tbl_transaksi_masuk` (`id_masuk`, `tgl_masuk`, `id_obat`, `id_unit`, `jumlah_masuk`, `id_user_pencatat`, `keterangan`) VALUES
-(1, '2025-11-11 14:15:00', 1, 1, 5, 11, 'ian'),
-(2, '2025-11-11 15:31:00', 2, 1, 5, 11, ''),
-(3, '2025-11-18 10:09:00', 1, 4, 3, 11, 'adgahs'),
-(4, '2026-02-03 19:36:00', 1, 2, 10, 11, 'blabla'),
-(5, '2026-03-24 19:40:00', 1, 1, 1, 11, ''),
-(6, '2026-03-24 19:43:00', 1, 1, 1, 11, 'admin'),
-(7, '2026-03-24 19:43:00', 1, 1, 1, 11, '1'),
-(8, '2026-04-03 19:58:00', 1, 1, 1, 11, 'aku'),
-(9, '2026-04-10 22:08:00', 2, 1, 10, 11, ''),
-(10, '2026-04-10 22:10:00', 2, 1, 10, 11, ''),
-(11, '2026-04-10 22:11:00', 2, 1, 20, 11, '');
 
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_transaksi_transfer`
@@ -1596,24 +1515,11 @@ CREATE TABLE `tbl_transaksi_transfer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_transaksi_transfer`
---
+-- Data dump for `tbl_transaksi_transfer` excluded for privacy & security.
 
-INSERT INTO `tbl_transaksi_transfer` (`id_transfer`, `id_request`, `tgl_transfer`, `id_obat`, `id_unit_asal`, `id_unit_tujuan`, `jumlah`, `id_user_pencatat`, `keterangan`) VALUES
-(1, NULL, '2025-11-11 14:16:39', 1, 1, 2, 3, 11, ''),
-(2, 2, '2025-11-11 15:31:22', 1, 1, 3, 1, 11, NULL),
-(3, 2, '2025-11-11 15:31:22', 2, 1, 3, 4, 11, NULL),
-(4, NULL, '2025-11-18 10:10:41', 1, 1, 4, 1, 11, 'hsgfhs'),
-(5, 1, '2025-11-18 10:27:38', 2, 1, 3, 1, 11, NULL),
-(6, NULL, '2026-03-24 19:39:51', 2, 1, 3, 1, 11, ''),
-(7, 3, '2026-03-24 19:41:09', 1, 1, 3, 1, 11, NULL),
-(8, 3, '2026-03-24 19:41:09', 2, 1, 3, 1, 11, NULL),
-(9, 4, '2026-03-24 19:44:11', 1, 1, 3, 2, 11, NULL),
-(10, 5, '2026-04-10 22:08:43', 1, 1, 3, 1, 11, NULL),
-(11, NULL, '2026-04-10 22:09:26', 2, 1, 3, 10, 11, ''),
-(12, 6, '2026-04-10 22:11:05', 2, 1, 3, 10, 11, NULL);
 
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_unit`
@@ -1635,7 +1541,9 @@ INSERT INTO `tbl_unit` (`id_unit`, `nama_unit`) VALUES
 (5, 'RAWAT INAP'),
 (3, 'UGD');
 
+
 -- --------------------------------------------------------
+
 
 --
 -- Table structure for table `tbl_user`
@@ -1652,24 +1560,11 @@ CREATE TABLE `tbl_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_user`
---
-
+-- Data dump for `tbl_user` (Default Seed Account)
+-- Username: superadmin | Password: superadmin
 INSERT INTO `tbl_user` (`id_user`, `id_role`, `id_poli`, `username`, `password`, `nama_lengkap`, `is_active`) VALUES
-(1, 3, 1, 'poliumum', '$2y$10$CJNBHJLX0R0boiMIb8fjUuxlJZh7GBLkZYrxbJT.tHtoxm6ROEuHG', 'User Poli Umum ', 1),
-(2, 3, 2, 'polikiakb', '$2y$10$ChnLfEhiBh6dSnBxapiCIOeMarzz3nNlU8waYetIjURNFp/Q/2aee', 'User Poli KIA-KB', 1),
-(3, 3, 3, 'poligigi', '$2y$10$bkrxXLLqjCmWbvTK5gjsVuLp6As6rgoX.q5IK38c5AemNJcKNgWp.', 'User Poli Gigi', 1),
-(4, 3, 4, 'polimtbs', '$2y$10$8ODd0CJtYwlOdHuPSIkZb.f5Te./hUlRTBrDBdVFwYR5Aeu73SYrK', 'User Poli MTBS', 1),
-(5, 3, 5, 'polihiv', '$2y$10$K7TfjNX/lma5j8WFrPwAOOYixjAegghOwCgit1sYH1C8BQuI2XB0K', 'User Poli HIV', 1),
-(6, 3, 6, 'politbc', '$2y$10$HRgCeaE1auOAiO7qTSrWdOVu2VX0xXT9n6ok0cieJR3UtzL61K83S', 'User Poli TBC', 1),
-(7, 4, 7, 'ugd', '$2y$10$PT7rrknzCoRxmX.TXtpEoOdcAuNgDDnEDlVzExR19LyGwAzmb6Ta6', 'User UGD', 1),
-(8, 4, 8, 'kbponed', '$2y$10$CiCUhG.z8pK7mdvAJuCqCe3cdzKBRqd3BrAODvs5NA.UzLyZHS7Du', 'User KB Poned', 1),
-(9, 4, 9, 'rawatinap', '$2y$10$0E6ROYusinUCOaiAVVPI9uij3tb1N611d5DdmyJuxvdtclPkhpFlK', 'User Rawat Inap', 1),
-(10, 1, NULL, 'superadmin', '$2y$10$b/RxuouA1ZntUU9tkxMJSO8nNJTi0GtaHpnCV9ooSIwqwKSbnO.gG', 'Super Admin SIVO', 1),
-(11, 2, NULL, 'admin', '$2y$10$jbrcpcHv5FBTVIx/.TeAfudE3Jd6kLDrsRncpH8EXvdAf3qVGyB7.', 'Admin', 1),
-(12, 5, NULL, 'apotek', '$2y$10$ih2E0.1jq9xz3xp5Ke3Y6O2XgfG5EW9P/88v7n9OaEpb6fhPnhds2', 'apotek', 1);
+(1, 1, NULL, 'superadmin', '$2y$10$BxT9/5WRoOYKEk8qCs4ieezSOfUtZ8w7dWy87F6qiiHkFOs9DaIBG', 'Super Administrator', 1);
 
---
 -- Indexes for dumped tables
 --
 
@@ -2027,6 +1922,23 @@ ALTER TABLE `tbl_transaksi_transfer`
 ALTER TABLE `tbl_user`
   ADD CONSTRAINT `tbl_user_ibfk_1` FOREIGN KEY (`id_role`) REFERENCES `tbl_role` (`id_role`),
   ADD CONSTRAINT `tbl_user_ibfk_2` FOREIGN KEY (`id_poli`) REFERENCES `tbl_poli` (`id_poli`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- --------------------------------------------------------
+
+--
+-- Dumping default initial user for table `tbl_user` (Default Setup)
+-- Username: superadmin | Password default: superadmin
+--
+INSERT INTO `tbl_user` (`id_user`, `id_role`, `id_poli`, `username`, `password`, `nama_lengkap`, `is_active`) VALUES
+(1, 1, NULL, 'superadmin', '$2y$10$O04B0x2yCq/5g9603lT2a.a3z6v7Cg.k1l4Uo3J4Hq7m9b6a1X0z.', 'Super Admin SIVO', 1);
+
+-- --------------------------------------------------------
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

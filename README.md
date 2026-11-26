@@ -43,10 +43,11 @@ Langkah instalasi sistem pada lingkungan lokal:
      ```sql
      CREATE DATABASE dbpuskesmas;
      ```
-   - Import skema dan data awal dari file `dbpuskesmas.sql`.
+   - Import skema dan data master awal dari file `database_schema.sql`.
+   - Akun default administrator: Username `superadmin`, Password `superadmin`.
 
 3. **Pengaturan Koneksi:**
-   - Buka `config.php` dan sesuaikan parameter host, user, password, serta nama database.
+   - Salin file `.env.example` menjadi `.env` lalu sesuaikan konfigurasi kredensial database Anda (host, user, password, dbname).
 
 4. **Akses Aplikasi:**
    - Buka browser dan arahkan ke: `http://localhost/puskesmas/`
@@ -77,8 +78,8 @@ Proyek ini menggunakan dua target deployment:
 
 ### 2. Server PHP / cPanel / Apache (Aplikasi Utama)
 - Salin seluruh berkas proyek ke direktori web server (misal: `public_html` atau `htdocs`).
-- Buat database MySQL pada server target dan import `dbpuskesmas.sql`.
-- Sesuaikan konfigurasi database pada `config.php`.
+- Buat database MySQL pada server target dan import `database_schema.sql`.
+- Konfigurasikan file `.env` sesuai kredensial server.
 
 ---
 
